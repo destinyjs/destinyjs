@@ -1,7 +1,5 @@
 import {
-  validateAndFlatDocumentSchema,
   makeCreateTableBySchema,
-  validateAndFlattenSchema,
   makeSaveDocument,
   numberType,
   stringType,

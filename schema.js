@@ -55,9 +55,9 @@ export const makeCreateTableBySchema = (schema, baseTableName) => {
       : 0
     return liveKey
   }).sort((a, b) => (a.nestedLevel !== b.nestedLevel)
-  ? (a.nestedLevel < b.nestedLevel ? -1 : 1)
-  : (a < b) ? -1 : 1
-)
+    ? (a.nestedLevel < b.nestedLevel ? -1 : 1)
+    : (a < b) ? -1 : 1
+  )
 
   const tablesSchemata = { }
 
@@ -120,9 +120,47 @@ export const makeCreateTableBySchema = (schema, baseTableName) => {
   return sql
 }
 
-export const validateAndFlatDocumentSchema = (schema, document) => {
+export const getTablesBySchema = (schema, baseTableName) => {
+  const fieldSchema = validateAndFlattenSchema(schema)
+  const sortedFields = Object.keys(fieldSchema).map((key) => {
+    const liveKey = new String(key.substring(2))
+    const matchedArrayLevel = liveKey.match(/\[\]/g)
+    liveKey.nestedLevel = matchedArrayLevel != null
+      ? matchedArrayLevel.length
+      : 0
+    return liveKey
+  }).sort((a, b) => (a.nestedLevel !== b.nestedLevel)
+    ? (a.nestedLevel < b.nestedLevel ? -1 : 1)
+    : (a < b) ? -1 : 1
+  )
+
+  const tablesSchemata = { }
+
+  for(const key of sortedFields) {
+    const lastArrayPos = key.lastIndexOf('[]')
+    const longestPrefix = lastArrayPos > -1 ? key.substring(0, lastArrayPos) : ''
+
+    const tableName = longestPrefix.length > 0
+      ? `${baseTableName}-${longestPrefix}`
+      : baseTableName
+
+    if (tablesSchemata[tableName] == null) {
+      tablesSchemata[tableName] = {}
+    }
+  }
+
+  return Object.keys(tablesSchemata)
+}
+
+export const makeSaveDocument = (schema, aggregateId, baseTableName, document) => {
   const fieldSchema = validateAndFlattenSchema(schema)
   const flatDocument = flat(document)
+
+  const allTableNames = getTablesBySchema(schema, baseTableName)
+  let sql = ''
+  for(const tableName of allTableNames) {
+    sql += `DELETE FROM ${escapeId(tableName)} WHERE ${escapeId('AggregateId')} = ${escape(aggregateId)};\n`
+  }
   
   for(const key of Object.keys(flatDocument)) {
     const pureKey = key.replace(/\.(\d+)($|\.)/ig, '[]$2')
@@ -137,12 +175,6 @@ export const validateAndFlatDocumentSchema = (schema, document) => {
       throw new Error(`Incompatible type at ${pureKey} with ${value}`)
     }
   }
-
-  return flatDocument
-}
-
-export const makeSaveDocument = (schema, aggregateId, baseTableName, document) => {
-  const flatDocument = validateAndFlatDocumentSchema(schema, document)
 
   const sortedFields = Object.keys(flatDocument).map((key) => {
     const liveKey = new String(key.replace(/\.(\d+)($|\.)/ig, '[$1]$2'))
@@ -207,7 +239,6 @@ export const makeSaveDocument = (schema, aggregateId, baseTableName, document) =
     targetDocument[columnName] = flatDocument[key.originalKey]    
   }
 
-  let sql = ''
   for(const tableName of Object.keys(tablesAffinity)) {
     for(let i = 0; i< tablesAffinity[tableName].length; i++) {
       const row = tablesAffinity[tableName][i]
