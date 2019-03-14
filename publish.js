@@ -1,22 +1,29 @@
 import getAggregateStates from './get-aggregate-states'
+import createWriteConnection from './create-write-connection'
 
 const publish = async (pool, events) => {
-	const eventCount = events.length
 	const aggregateIds = new Set(events.map(
 		({ aggregateId }) => aggregateId
 	))
 	const aggregateStates = await getAggregateStates(pool, aggregateIds)
 
-	for(let eventIndex = 0; eventIndex < eventCount; eventIndex++) {
-		const event = events[eventIndex]
-		const { aggregateId } = event
-		const {
-			aggregateVersion,
-			...state
-		} = aggregateStates.get(aggregateId)
+	const connection = await createWriteConnection(pool)
 
+	await connection.beginTransaction()
 
+	for(const writeModel of pool.writeModels) {
+		for(const { aggregateId, type, payload } of events) {
+			const {
+				aggregateVersion,
+				...state
+			} = aggregateStates.get(aggregateId)
+			c
+		}
 	}
+
+	await connection.commitTransaction()
+
+	await connection.close()
 
 	// // beginTransaction
 	// // 1. write events to table "eventStore"
