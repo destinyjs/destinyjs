@@ -4,6 +4,7 @@ import { escapeId, escape } from 'mysql2'
 import getSQLQueryByJSON from './get-sql-query-by-json'
 
 const createWriteTransaction = (pool) => {
+	const { eventsTableName = 'events' } = pool
 	const Promise = pool.Promise || global.Promise
 
 	const connectionPromise = mysql.createConnection({
@@ -21,7 +22,7 @@ const createWriteTransaction = (pool) => {
 		saveEvent: ({ aggregateId, aggregateVersion, type, payload })=>{
 			queries.push(
 				`INSERT INTO ${
-					escapeId('events')
+					escapeId(eventsTableName)
 				} (${
 					escapeId('aggregateId')
 				}, ${
@@ -47,7 +48,7 @@ const createWriteTransaction = (pool) => {
 		commit: async () => {
 			const connection = await connectionPromise
 
-			queries.push('COMMIT TRANSACTION')
+			queries.push('COMMIT')
 
 			const query = queries.join(';\n')
 			console.log(
@@ -56,6 +57,7 @@ const createWriteTransaction = (pool) => {
 
 			await connection.query(query)
 
+			await connection.close()
 		}
 	}
 }

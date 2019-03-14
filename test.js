@@ -20,7 +20,7 @@ const options = {
 		user: 'root',
 		password: 'pwd',
 		database: 'qqq'
-	},
+	}
 }
 
 const events = [
@@ -48,8 +48,13 @@ const events = [
 			size: 'L'
 		}
 	}
-
 ]
 
-destiny(options).publish(events)
+const main = async () => {
+	await destiny(options).init()
+	await destiny(options).publish(events)
+}
+
+main().catch(error=>console.error(error))
+
 

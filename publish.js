@@ -27,7 +27,7 @@ const publish = async (pool, events) => {
 
 			const nextState = writeModel.reducer(state, events)
 
-			transaction.saveAggregateState(writeModel.name, {})
+			//transaction.saveAggregateState(writeModel.name, {})
 
 			console.log(nextState)
 		}
