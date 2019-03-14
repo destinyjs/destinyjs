@@ -123,13 +123,14 @@ export const validateAndFlatDocumentSchema = (schema, document) => {
   
   for(const key of Object.keys(flatDocument)) {
     const pureKey = key.replace(/\.(\d+)($|\.)/ig, '[]$2')
-    if(fieldSchema[`$.${pureKey}`] == null) {
+    const expectedType = fieldSchema[`$.${pureKey}`]
+
+    if(expectedType == null) {
       throw new Error(`Document does not match schema ${pureKey}`) 
     }
-
-    const expectedValueType = schema[pureKey]
     const value = flatDocument[key]
-    if(value != null && value.constructor !== expectedValueType) {
+    
+    if(value != null && value.constructor !== expectedType) {
       throw new Error(`Incompatible type at ${pureKey} with ${value}`)
     }
   }
