@@ -301,16 +301,14 @@ export const makeSaveDocument = (schema, aggregateId, baseTableName, document) =
 
 export const makeLoadDocument = (schema, aggregateId, baseTableName) => {
   const allTableNames = getTablesBySchema(schema, baseTableName)
-  let sql = ''
-  for(let tableName of allTableNames) {
-    sql += `(SELECT ${escapeId(tableName)}.* FROM ${escapeId(tableName)} `
-    sql += `WHERE \`AggregateId\` = ${escape(aggregateId)})\n`
-    sql += 'UNION ALL\n'
-  }
-
-  if(sql.endsWith('UNION ALL\n')) {
-    sql = sql.substring(0, sql.length - 10)
-  }
+  let sql = 'SELECT '
+  sql += allTableNames.map(tableName => `${escapeId(tableName)}.*`).join(',\n  ')
+  sql += 'FROM '
+  sql += allTableNames.map(tableName => `${escapeId(tableName)}`).join(',\n  ')
+  sql += `WHERE `
+  sql += allTableNames.map(tableName => `${escapeId(tableName)}.\`AggregateId\` = ${
+    escape(aggregateId)
+  }`).join(' AND\n  ')
   sql += ';'
 
   return sql
@@ -331,11 +329,11 @@ export const vivificateJsonBySchema = (rowList, baseTableName) => {
         unflattenDocument[pureField] = fields[fieldName]
         unflattenDocument.aggregateId = AggregateId
       } else {
-        if(lastArrayIndexesByTable[tableName] == null) {
-          lastArrayIndexesByTable[tableName] = 0
+        if(lastArrayIndexesByTable[LeftPrefix] == null) {
+          lastArrayIndexesByTable[LeftPrefix] = 0
         }
 
-        const idx = lastArrayIndexesByTable[tableName]++
+        const idx = lastArrayIndexesByTable[LeftPrefix]++
 
         const compoundKey = `${LeftPrefix}[${idx}]${pureField}`
         const unflattenKey = compoundKey.replace(/\[\d+\]/, '.$1')

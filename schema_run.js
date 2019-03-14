@@ -71,6 +71,7 @@ const main = async () => {
   const loadDocumentDeclataion = makeLoadDocument(schema, 'AggId', 'Stories')
   const [rows] = await connection.query(loadDocumentDeclataion)
 
+  console.log(rows)
 
 }
 
