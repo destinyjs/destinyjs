@@ -12,7 +12,9 @@ const getInitPromise = ({ promise }) =>
   new Promise(initResolve => {
     promise[symbol].initResolve = async (continuation, ...args) => {
       initResolve()
-      return await continuation(...args)
+      const result = await continuation(...args)
+      console.log('inner result', result);
+      return result;
     }
   })
 
@@ -26,8 +28,8 @@ const getSearchApi = (connection, tableName) => {
   })
   const pool = { promise }
 
-  const init = ({ promise }) =>
-    new Promise((resolve, reject) => {
+  const init = async ({ promise }) => {
+    const result = await new Promise((resolve, reject) => {
       const { extractFields, findCondition, sortFields, limitRows, skipRows } = promise[symbol];
 
       const fields = [
@@ -107,6 +109,9 @@ const getSearchApi = (connection, tableName) => {
         }
       });
     });
+    
+    return result;
+  };
 
   promise[symbol] = Object.create(null)
   promise[symbol].resolve = promiseResolve
@@ -148,7 +153,7 @@ const getSearchApi = (connection, tableName) => {
     return promise
   }
 
-  promise[symbol].initPromise.then(init.bind(null, pool))
+  promise[symbol].initPromise.then(init.bind(null, pool));
 
   const promiseThen = promise.then.bind(promise)
   const promiseCatch = promise.catch.bind(promise)
