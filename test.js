@@ -1,7 +1,51 @@
-import readApi from './read-api';
+import destiny from './destiny'
 
-(async () => {
-  const api = readApi();
-  const result = await api.table('table').find({ test: 1 }).limit(3);
-  console.log(result);
-})();
+const options = {
+	writeModels: [
+		{
+			name: 'Футболки',
+			schema: {
+				items: ['string']
+			},
+			reducer: (state = { items: [] }, event) => {
+				state.items.push(JSON.stringify(event))
+			}
+		}
+
+	],
+	connection: {
+		host:'localhost',
+		user: 'root',
+		database: 'test'
+	},
+}
+
+const events = [
+	{
+		aggregateId: 'Тула',
+		type: 'ФУТБОЛКА_ИЗГОТОВЛЕНА',
+		payload: {
+			id: 'id1',
+			size: 'L'
+		}
+	},
+	{
+		aggregateId: 'Тула',
+		type: 'ФУТБОЛКА_ОТПРАВЛЕНА',
+		payload: {
+			id: 'id1',
+			size: 'L'
+		}
+	},
+	{
+		aggregateId: 'Калуга',
+		type: 'ФУТБОЛКА_ПОЛУЧЕНА',
+		payload: {
+			id: 'id1',
+			size: 'L'
+		}
+	}
+
+]
+
+destiny(options).publish(events)
