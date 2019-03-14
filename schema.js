@@ -103,6 +103,8 @@ export const makeCreateTableBySchema = (schema, baseTableName) => {
   let sql = ''
   for(const tableName of Object.keys(tablesSchemata)) {
     const tableSchema = tablesSchemata[tableName]
+    // TODO: conditional drop table
+    sql += `DROP TABLE ${escapeId(tableName)} IF EXISTS;\n`
     sql += `CREATE TABLE ${escapeId(tableName)}(\n  \`AggregateId\` VARCHAR(128) NOT NULL, \n`
     sql += `  \`AggregateVersion\` BIGINT NOT NULL, \n`
 
