@@ -1,5 +1,5 @@
 import getAggregateStates from './get-aggregate-states'
-import createWriteConnection from './create-write-connection'
+import createWriteTransaction from './create-write-transaction'
 
 const publish = async (pool, events) => {
 	const aggregateIds = new Set(events.map(
@@ -7,9 +7,9 @@ const publish = async (pool, events) => {
 	))
 	const aggregateStates = await getAggregateStates(pool, aggregateIds)
 
-	const connection = await createWriteConnection(pool)
+	const transaction = await createWriteTransaction(pool)
 
-	await connection.beginTransaction()
+
 
 	for(const writeModel of pool.writeModels) {
 		for(const { aggregateId, type, payload } of events) {
@@ -17,13 +17,17 @@ const publish = async (pool, events) => {
 				aggregateVersion,
 				...state
 			} = aggregateStates.get(aggregateId)
-			c
+
+			transaction.saveEvent({
+				aggregateId,
+				aggregateVersion,
+				type,
+				payload
+			})
+
 		}
 	}
-
-	await connection.commitTransaction()
-
-	await connection.close()
+	await transaction.commit()
 
 	// // beginTransaction
 	// // 1. write events to table "eventStore"
