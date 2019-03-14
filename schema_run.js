@@ -57,4 +57,4 @@ const document = {
 
 // console.log(validateAndFlatDocumentSchema(schema, document))
 
-console.log(makeSaveDocument(schema, '', 'Stories', document))
+console.log(makeSaveDocument(schema, 'AggId', 'Stories', document))

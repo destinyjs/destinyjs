@@ -1,13 +1,13 @@
 import flat from 'flat'
 
-export const qualificationMark = Symbol('QualificationMark')
+export const leftPrefixMark = Symbol('LeftPrefixMark')
 export const numberType = Symbol('NumberType')
 export const stringType = Symbol('StringType')
 export const boolType = Symbol('BoolType')
 export const dateType = Symbol('DateType')
 
-const escapeId = str => `\`${str.replace(/[`\\]/ig, '\\$1')}\``
-const escape = str => `"${str.replace(/["\\]/ig, '\\$1')}"`
+const escapeId = str => `\`${String(str).replace(/[`\\]/ig, '\\$1')}\``
+const escape = str => `"${String(str).replace(/["\\]/ig, '\\$1')}"`
 
 const primitiveTypesMap = {
   [numberType]: Number,
@@ -163,7 +163,6 @@ export const makeSaveDocument = (schema, aggregateId, baseTableName, document) =
   )
 
   const multiArrayIndexes = {}
-
   const tablesAffinity = {}
 
   for(const key of sortedFields) {
@@ -172,7 +171,7 @@ export const makeSaveDocument = (schema, aggregateId, baseTableName, document) =
     const longestPrefix = lastArrayPos > -1 ? pureKey.substring(0, lastArrayPos) : ''
     const fieldName = lastArrayPos > -1 ? pureKey.substring(lastArrayPos + 2) : pureKey
 
-    const qualification = key.substr(0, key.lastIndexOf('['))
+    const leftPrefix = key.substr(0, key.lastIndexOf('['))
     
     const tableName = longestPrefix.length > 0
       ? `${baseTableName}-${longestPrefix}`
@@ -195,7 +194,7 @@ export const makeSaveDocument = (schema, aggregateId, baseTableName, document) =
 
     if(tablesAffinity[tableName][documentIndex] == null) {
       tablesAffinity[tableName][documentIndex] = {
-        [qualificationMark]: qualification
+        [leftPrefixMark]: leftPrefix
       }
     }
 
@@ -207,6 +206,29 @@ export const makeSaveDocument = (schema, aggregateId, baseTableName, document) =
   }
 
   let sql = ''
+  for(const tableName of Object.keys(tablesAffinity)) {
+    for(let i = 0; i< tablesAffinity[tableName].length; i++) {
+      const row = tablesAffinity[tableName][i]
+      if(row == null) {
+        continue
+      }
+
+      sql += `INSERT INTO ${escapeId(tableName)}(\n  `
+      const fields = Object.keys(row)
+      sql += ['AggregateId', 'LeftPrefix', ...fields].map(
+        key => escapeId(key)
+      ).join(',\n  ')
+
+      sql += '\n) VALUES ( \n  '
+      sql += `${escape(aggregateId)},\n  ${escape(row[leftPrefixMark])},  \n  `
+      sql += fields.map(fieldName => {
+        return escape(row[fieldName])
+      }).join(',\n  ')
+
+      sql += '\n);\n'
+    }
+    
+  }
 
   return sql
 }
