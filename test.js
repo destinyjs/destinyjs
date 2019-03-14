@@ -9,14 +9,17 @@ const options = {
 			},
 			reducer: (state = { items: [] }, event) => {
 				state.items.push(JSON.stringify(event))
+				return state
 			}
 		}
 
 	],
 	connection: {
-		host:'localhost',
+		host: 'localhost',
+		port: 3307,
 		user: 'root',
-		database: 'test'
+		password: 'pwd',
+		database: 'qqq'
 	},
 }
 
@@ -49,3 +52,4 @@ const events = [
 ]
 
 destiny(options).publish(events)
+
