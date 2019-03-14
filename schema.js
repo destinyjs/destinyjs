@@ -1,4 +1,4 @@
-import flat from 'flat'
+import { flatten, unflatten } from 'flat'
 
 export const leftPrefixMark = Symbol('LeftPrefixMark')
 export const numberType = Symbol('NumberType')
@@ -175,7 +175,7 @@ export const getTablesBySchema = (schema, baseTableName) => {
 
 export const makeSaveDocument = (schema, aggregateId, baseTableName, document) => {
   const fieldSchema = validateAndFlattenSchema(schema)
-  const flatDocument = flat(document)
+  const flatDocument = flatten(document)
 
   const allTableNames = getTablesBySchema(schema, baseTableName)
   let sql = ''
@@ -311,4 +311,39 @@ export const makeLoadDocument = (schema, aggregateId, baseTableName) => {
   sql += ';'
 
   return sql
+}
+
+export const vivificateJsonBySchema = (rowList, baseTableName) => {
+  const unflattenDocument = {}
+  const lastArrayIndexesByTable = {}
+
+  for(const row of rowList) {
+    const { AggregateId, LeftPrefix, ...fields } = row
+    for(const fieldName of Object.keys(fields)) {
+      const tableNameShift = fieldName.lastIndexOf('`.')
+      const tableName = fieldName.substring(1, tableNameShift)
+      const pureField = fieldName.substring(tableNameShift + 2)
+
+      if(tableName === baseTableName) {
+        unflattenDocument[pureField] = fields[fieldName]
+        unflattenDocument.aggregateId = AggregateId
+      } else {
+        if(lastArrayIndexesByTable[tableName] == null) {
+          lastArrayIndexesByTable[tableName] = 0
+        }
+
+        const idx = lastArrayIndexesByTable[tableName]++
+
+        const compoundKey = `${LeftPrefix}[${idx}]${pureField}`
+        const unflattenKey = compoundKey.replace(/\[\d+\]/, '.$1')
+
+        unflattenDocument[unflattenKey] = fields[fieldName]
+      }
+
+    }
+  }
+
+  const result = unflatten(unflattenDocument)
+
+  return result
 }
