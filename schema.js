@@ -275,3 +275,20 @@ export const makeSaveDocument = (schema, aggregateId, baseTableName, document) =
 
   return sql
 }
+
+export const makeLoadDocument = (schema, aggregateId, baseTableName) => {
+  const allTableNames = getTablesBySchema(schema, baseTableName)
+  let sql = ''
+  for(let tableName of allTableNames) {
+    sql += `(SELECT ${escapeId(tableName)}.* FROM ${escapeId(tableName)} `
+    sql += `WHERE \`AggregateId\` = ${escape(aggregateId)})\n`
+    sql += 'UNION ALL\n'
+  }
+
+  if(sql.endsWith('UNION ALL\n')) {
+    sql = sql.substring(0, sql.length - 10)
+  }
+  sql += ';'
+
+  return sql
+}

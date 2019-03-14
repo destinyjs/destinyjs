@@ -1,6 +1,7 @@
 import {
   makeCreateTableBySchema,
   makeSaveDocument,
+  makeLoadDocument,
   numberType,
   stringType,
   boolType,
@@ -52,3 +53,5 @@ const document = {
 console.log(makeCreateTableBySchema(schema, 'Stories'))
 
 console.log(makeSaveDocument(schema, 'AggId', 'Stories', document))
+
+console.log(makeLoadDocument(schema, 'AggId', 'Stories'))
