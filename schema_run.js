@@ -2,6 +2,7 @@ import {
   validateAndFlatDocumentSchema,
   makeCreateTableBySchema,
   validateAndFlattenSchema,
+  makeSaveDocument,
   numberType,
   stringType,
   boolType,
@@ -9,27 +10,23 @@ import {
 } from './schema'
 
 const schema = {
-    a: {
-      aa: [numberType],
-      ab: stringType
-    },
-    b: [{
-        ba: numberType,
-        bb: stringType,
-        bc: [{
-          bca: numberType,
-          bcb: stringType
-        }]
-    }],
-    c: boolType,
-    d: dateType
-  }
+  a: {
+    aa: [numberType],
+    ab: stringType
+  },
+  b: [{
+      ba: numberType,
+      bb: stringType,
+      bc: [{
+        bca: numberType,
+        bcb: stringType
+      }]
+  }],
+  c: boolType,
+  d: dateType
+}
 
-// console.log(validateAndFlattenSchema(schema))
-
-// console.log(makeCreateTableBySchema(schema, 'Stories'))
-
-console.log(validateAndFlatDocumentSchema(schema, {
+const document = {
   a: {
     aa: [11, 22, 33, 44],
     ab: 'Qwerty'
@@ -52,4 +49,12 @@ console.log(validateAndFlatDocumentSchema(schema, {
   ],
   c: true,
   d: new Date()
-}))
+}
+
+// console.log(validateAndFlattenSchema(schema))
+
+// console.log(makeCreateTableBySchema(schema, 'Stories'))
+
+// console.log(validateAndFlatDocumentSchema(schema, document))
+
+console.log(makeSaveDocument(schema, '', 'Stories', document))

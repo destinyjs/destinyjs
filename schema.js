@@ -54,9 +54,9 @@ export const makeCreateTableBySchema = (schema, baseTableName) => {
       : 0
     return liveKey
   }).sort((a, b) => (a.nestedLevel !== b.nestedLevel)
-      ? a.nestedLevel > b.nestedLevel
-      : a > b
-  )
+  ? (a.nestedLevel < b.nestedLevel ? -1 : 1)
+  : (a < b) ? -1 : 1
+)
 
   const tablesSchemata = { }
 
@@ -111,7 +111,7 @@ export const makeCreateTableBySchema = (schema, baseTableName) => {
     }
       
     sql += `  PRIMARY KEY(\`AggregateId\`), \n  INDEX USING BTREE(\`AggregateVersion\`)\n`
-    sql += `)\n`
+    sql += `);\n`
   }
 
   return sql
@@ -138,3 +138,63 @@ export const validateAndFlatDocumentSchema = (schema, document) => {
   return flatDocument
 }
 
+export const makeSaveDocument = (schema, aggregateId, baseTableName, document) => {
+  const flatDocument = validateAndFlatDocumentSchema(schema, document)
+
+  const sortedFields = Object.keys(flatDocument).map((key) => {
+    const liveKey = new String(key.replace(/\.(\d+)($|\.)/ig, '[$1]$2'))
+    const matchedArrayLevel = liveKey.match(/\[\d+\]/g)
+    liveKey.nestedLevel = matchedArrayLevel != null
+      ? matchedArrayLevel.length
+      : 0
+    
+    liveKey.arrayLevel = matchedArrayLevel != null
+      ? matchedArrayLevel.map(
+        lev => Number(lev.substring(1, lev.length - 1))
+      )
+      : null
+
+    liveKey.originalKey = key
+    return liveKey
+  }).sort((a, b) => (a.nestedLevel !== b.nestedLevel)
+      ? (a.nestedLevel < b.nestedLevel ? -1 : 1)
+      : (a < b) ? -1 : 1
+  )
+
+  const tablesAffinity = {}
+
+  for(const key of sortedFields) {
+    const pureKey = key.replace(/\[(\d+)\]/ig, '[]')
+    const lastArrayPos = pureKey.lastIndexOf('[]')
+    const longestPrefix = lastArrayPos > -1 ? pureKey.substring(0, lastArrayPos) : ''
+    const fieldName = lastArrayPos > -1 ? pureKey.substring(lastArrayPos + 2) : pureKey
+    
+    const tableName = longestPrefix.length > 0
+      ? `${baseTableName}-${longestPrefix}`
+      : baseTableName
+
+    if(tablesAffinity[tableName] == null) {
+      tablesAffinity[tableName] = []
+    }
+
+    const documentIndex = key.arrayLevel != null
+    ? key.arrayLevel.reduce((acc, val) => acc * 100 + val, 1)
+    : 0
+
+    if(tablesAffinity[tableName][documentIndex] == null) {
+      tablesAffinity[tableName][documentIndex] = {}
+    }
+
+    const targetDocument = tablesAffinity[tableName][documentIndex]
+
+    const columnName = fieldName.length > 0 ? fieldName : '<INTERNAL>'
+
+    targetDocument[columnName] = flatDocument[key.originalKey]    
+  }
+
+  console.log('@@@', tablesAffinity)
+
+  let sql = ''
+
+  return sql
+}
