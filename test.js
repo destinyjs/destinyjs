@@ -1,8 +1,19 @@
 import destiny from './destiny'
 
 const options = {
+	writeModels: [
+		{
+			name: 'Футболки',
+			schema: {
+				items: ['string']
+			},
+			reducer: (state = { items: [] }, event) => {
+				state.items.push(JSON.stringify(event))
+			}
+		}
+
+	],
 	connection: {},
-	schema: {}
 }
 
 const events = [
