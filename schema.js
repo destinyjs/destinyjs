@@ -122,16 +122,19 @@ export const makeCreateTableBySchema = (schema, baseTableName) => {
   for(const tableName of Object.keys(tablesSchemata)) {
     const tableSchema = tablesSchemata[tableName]
     // TODO: conditional drop table
-    sql += `DROP TABLE ${escapeId(tableName)} IF EXISTS;\n`
-    sql += `CREATE TABLE ${escapeId(tableName)}(\n  \`AggregateId\` VARCHAR(128) NOT NULL, \n`
-    sql += `  \`AggregateVersion\` BIGINT NOT NULL, \n`
+    sql += `DROP TABLE IF EXISTS ${escapeId(tableName)};\n`
+    sql += `CREATE TABLE ${escapeId(tableName)}(\n  `
+    sql += `  \`AggregateId\` VARCHAR(128) NOT NULL, \n`
+    sql += `  \`AggregateVersion\` BIGINT NOT NULL DEFAULT 0, \n`
+    sql += `  \`LeftPrefix\` VARCHAR(700) NOT NULL, \n`
 
     for(const columnName of Object.keys(tableSchema)) {
       const fieldName = columnName.length > 0 ? columnName : '<INTERNAL>'
       sql += `  ${escapeId(fieldName)} ${tableSchema[columnName]} NULL, \n`
     }
 
-    sql += `  PRIMARY KEY(\`AggregateId\`), \n  INDEX USING BTREE(\`AggregateVersion\`)\n`
+    sql += `  INDEX USING BTREE(\`AggregateId\`), \n`
+    sql += `  INDEX USING BTREE(\`AggregateVersion\`)\n`
     sql += `);\n`
   }
 
@@ -280,7 +283,7 @@ export const makeSaveDocument = (schema, aggregateId, baseTableName, document) =
           case String: return escape(row[fieldName])
           case Number: return +row[fieldName]
           case Boolean: return row[fieldName] ? 1 : 0
-          case Date: return escape(row[fieldName].toISOString())
+          case Date: return escape(row[fieldName].toISOString().replace(/[TZ]/ig, ' '))
           default: {
             throw new Error(`Incorrect type at ${row[leftPrefixMark]}${fieldName}`)
           }
