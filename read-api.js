@@ -26,8 +26,10 @@ const getSearchApi = (connection, tableName) => {
   })
   const pool = { promise }
 
-  const init = ({ findCondition, extractFields, sortFields, limitRows, skipRows }) =>
+  const init = ({ promise }) =>
     new Promise((resolve, reject) => {
+      const { extractFields, findCondition, sortFields, limitRows, skipRows } = promise[symbol];
+
       const fields = [
         extractFields == null ? '*' : extractFields,
         tableName
@@ -47,7 +49,7 @@ const getSearchApi = (connection, tableName) => {
             conditionParts.push('?');
           }
 
-          fields.push(left, operator, right);
+          fields.push(left, right);
         }
 
         conditionPart = ` WHERE ${conditionParts.join(' ')}`
@@ -78,14 +80,14 @@ const getSearchApi = (connection, tableName) => {
       let limitPart = '';
 
       if (limitRows != null) {
-        limitPart = 'LIMIT = ?';
+        limitPart = ' LIMIT ?';
         fields.push(limitRows);
       }
 
       let skipPart = '';
 
       if (skipRows != null) {
-        skipPart = 'OFFSET = ?';
+        skipPart = ' OFFSET ?';
         fields.push(skipRows);
       }
 
@@ -95,7 +97,7 @@ const getSearchApi = (connection, tableName) => {
         sortPart,
         limitPart,
         skipPart
-      ].join();
+      ].join('');
 
       connection.query(query, fields, (error, rows) => {
         if (error) {
@@ -158,11 +160,11 @@ const getSearchApi = (connection, tableName) => {
 };
 
 const getDbApi = (connectionParams) => {
-  // const connection = mysql.createConnection(connectionParams);
+  const connection = mysql.createConnection(connectionParams);
 
   return {
     table(name) {
-      return getSearchApi(null, name);
+      return getSearchApi(connection, name);
     }
   }
 };
