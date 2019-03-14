@@ -1,0 +1,22 @@
+{
+  "name": "destinyjs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node -r esm ./index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/destinyjs/destinyjs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/destinyjs/destinyjs/issues"
+  },
+  "homepage": "https://github.com/destinyjs/destinyjs#readme",
+  "dependencies": {
+    "esm": "^3.2.17"
+  }
+}
