@@ -1,3 +1,11 @@
+const LITERAL = name => {
+  const mark = new String(name)
+  mark.flag = Symbol()
+  return mark
+}
+
+LITERAL``
+
 db
   table(name)
     find(condition)
@@ -5,18 +13,14 @@ db
     sort(fields)
     skip(rows)
     limit(rows)
-    groupBy(aggregate)
-    having(condition)
 
   join([tables], condition)
     skip(rows)
     limit(rows)
-    groupBy(aggregate)
-    having(condition)
     
 condition:
   ['fieldName1', operator, 'fieldName2']
-  ['fieldName1', operator, 'constant']
+  ['fieldName1', operator, 'constant'],
 
 operator:
   '>', '<', '=', '<>', '<=', '<='
