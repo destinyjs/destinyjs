@@ -7,15 +7,15 @@ const publish = async (pool, events) => {
 	))
 	const aggregateStates = await getAggregateStates(pool, aggregateIds)
 
-	const transaction = await createWriteTransaction(pool)
-
-
+	const transaction = createWriteTransaction(pool)
 
 	for(const writeModel of pool.writeModels) {
 		for(const { aggregateId, type, payload } of events) {
+			aggregateStates.get(aggregateId).aggregateVersion++
+
 			const {
 				aggregateVersion,
-				...state
+				state
 			} = aggregateStates.get(aggregateId)
 
 			transaction.saveEvent({
@@ -25,32 +25,15 @@ const publish = async (pool, events) => {
 				payload
 			})
 
+			const nextState = writeModel.reducer(state, events)
+
+			transaction.saveAggregateState(writeModel.name, {})
+
+			console.log(nextState)
 		}
 	}
+
 	await transaction.commit()
-
-	// // beginTransaction
-	// // 1. write events to table "eventStore"
-	// for(const {
-	// 	aggregateId,
-	// 	aggregateVersion,
-	// 	nextAggregateVersion,
-	// 	state,
-	// 	projectionName,
-	// 	projectionSchema
-	// } of items) {
-	// 	// 2. convert JSON state by schema to create/findAndUpdate operations on  language.
-	// 	// findAndUpdate({ $where: { aggregateId, aggregateVersion } })
-	// 	// 3. write operations to table ${projectionName}
-	// }
-	// // endTransaction
-
-
-
-
-	// for(const { aggregateId } of events) {
-	// 	const
-	// }
 }
 
 export default publish

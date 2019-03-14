@@ -1,8 +1,20 @@
-const mysql = require('mysql2/promise');
+import mysql from 'mysql2/promise'
 import { escapeId, escape } from 'mysql2'
 
+import getSQLQueryByJSON from './get-sql-query-by-json'
+
 const createWriteTransaction = (pool) => {
+	const Promise = pool.Promise || global.Promise
+
+	const connectionPromise = mysql.createConnection({
+		...pool.connection,
+		multipleStatements: true,
+		Promise
+	})
+
 	const queries = [
+		'SET TRANSACTION ISOLATION LEVEL SERIALIZABLE',
+		'START TRANSACTION'
 	]
 
 	return {
@@ -10,8 +22,15 @@ const createWriteTransaction = (pool) => {
 			queries.push(
 				`INSERT INTO ${
 					escapeId('events')
-				} (aggregateId, aggregateVersion, type, payload) ` +
-				` VALUES (${
+				} (${
+					escapeId('aggregateId')
+				}, ${
+					escapeId('aggregateVersion')
+				}, ${
+					escapeId('type')
+				}, ${
+					escapeId('payload')
+				}) VALUES (${
 					escape(aggregateId)
 				}, ${
 					escape(aggregateVersion)
@@ -22,10 +41,21 @@ const createWriteTransaction = (pool) => {
 				})`
 			)
 		},
-		commit: ()=>{
+		saveAggregateState: (tableName, aggregateState) => {
+			queries.push(getSQLQueryByJSON(pool, tableName, aggregateState))
+		},
+		commit: async () => {
+			const connection = await connectionPromise
+
+			queries.push('COMMIT TRANSACTION')
+
+			const query = queries.join(';\n')
 			console.log(
-				JSON.stringify(queries, null, 2)
+				query
 			)
+
+			await connection.query(query)
+
 		}
 	}
 }
