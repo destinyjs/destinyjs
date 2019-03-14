@@ -1,5 +1,5 @@
 import getAggregateStates from './get-aggregate-states'
-import createConnection from './create-connection'
+import createWriteConnection from './create-write-connection'
 
 const publish = async (pool, events) => {
 	const aggregateIds = new Set(events.map(
@@ -7,7 +7,7 @@ const publish = async (pool, events) => {
 	))
 	const aggregateStates = await getAggregateStates(pool, aggregateIds)
 
-	const connection = await createConnection(pool)
+	const connection = await createWriteConnection(pool)
 
 	await connection.beginTransaction()
 
@@ -17,7 +17,7 @@ const publish = async (pool, events) => {
 				aggregateVersion,
 				...state
 			} = aggregateStates.get(aggregateId)
-
+			c
 		}
 	}
 

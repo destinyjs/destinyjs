@@ -1,4 +1,4 @@
-const createConnection = (pool) => {
+const createWriteConnection = (pool) => {
 	return {
 		beginTransaction: ()=>{},
 		commitTransaction: ()=>{},
@@ -6,4 +6,4 @@ const createConnection = (pool) => {
 	}
 }
 
-export default createConnection
+export default createWriteConnection
