@@ -13,7 +13,11 @@ const options = {
 		}
 
 	],
-	connection: {},
+	connection: {
+		host:'localhost',
+		user: 'root',
+		database: 'test'
+	},
 }
 
 const events = [

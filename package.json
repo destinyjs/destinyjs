@@ -19,6 +19,7 @@
   "homepage": "https://github.com/destinyjs/destinyjs#readme",
   "dependencies": {
     "esm": "^3.2.17",
-    "flat": "^4.1.0"
+    "flat": "^4.1.0",
+    "mysql2": "^1.6.5"
   }
 }
