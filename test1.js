@@ -18,6 +18,6 @@ import createApi, { S } from './read-api';
     })
     .limit(3)
     .skip(5);
-
+    
   console.log('result', result);
 })();
