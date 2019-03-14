@@ -9,59 +9,77 @@ export const dateType = Symbol('DateType')
 const escapeId = str => `\`${String(str).replace(/[`\\]/ig, '\\$1')}\``
 const escape = str => `"${String(str).replace(/["\\]/ig, '\\$1')}"`
 
-const primitiveTypesMap = {
-  [numberType]: Number,
-  [stringType]: String,
-  [boolType]: Boolean,
-  [dateType]: Date
-}
+const primitiveTypesMap = new Map([
+  [numberType, Number],
+  [stringType, String],
+  [boolType, Boolean],
+  [dateType, Date]
+])
 
 export const validateAndFlattenSchema = (schema, path = '$') => {
   if(schema == null || schema.constructor !== Object) {
     throw new Error(`Wrong schema at ${path} - contain ${JSON.stringify(schema)}`)
   }
-  const fields = {}
+  const fields = new Map()
 
-  for(const key of Object.keys(schema)) {
-    if (typeof schema[key] === 'symbol' && primitiveTypesMap[schema[key]] != null) {
-      fields[`${path}.${key}`] = primitiveTypesMap[schema[key]]
-    } else if(Array.isArray(schema[key]) && schema[key].length === 1) {
-      if(typeof schema[key][0] === 'symbol' && primitiveTypesMap[schema[key][0]] != null) {
-        fields[`${path}.${key}[]`] = primitiveTypesMap[schema[key][0]]
+  for(const key in schema) {
+    if(!schema.hasOwnProperty(key)) {
+      continue
+    }
+    const value = schema[key]
+    if (typeof value === 'symbol' && primitiveTypesMap.has(value)) {
+      fields.set(`${path}.${key}`, primitiveTypesMap.get(value))
+    } else if(Array.isArray(value) && value.length === 1) {
+      const subValue = value[0]
+      const subPath = `${path}.${key}[]`
+      if(typeof subValue === 'symbol' && primitiveTypesMap.has(subValue)) {
+        fields.set(subPath, primitiveTypesMap.get(subValue))
       } else {
-        Object.assign(
-          fields,
-          validateAndFlattenSchema(schema[key][0], `${path}.${key}[]`)
-        )
+        const subFields = validateAndFlattenSchema(subValue, subPath)
+
+        subFields.forEach((value, key) => {
+          fields.set(key, value);
+        })
       }
     } else {
-      Object.assign(
-        fields,
-        validateAndFlattenSchema(schema[key], `${path}.${key}`)
-      )
+      const subPath = `${path}.${key}`
+
+      const subFields = validateAndFlattenSchema(schema[key], subPath)
+
+      subFields.forEach((value, key) => {
+          fields.set(key, value);
+      })
     }
   }
 
   return fields
 }
 
+const sortByNestedLevel = (a, b) => (a.nestedLevel !== b.nestedLevel)
+    ? (a.nestedLevel < b.nestedLevel ? -1 : 1)
+    : (a < b) ? -1 : 1
+
 export const makeCreateTableBySchema = (schema, baseTableName) => {
   const fieldSchema = validateAndFlattenSchema(schema)
-  const sortedFields = Object.keys(fieldSchema).map((key) => {
+  const sortedFields = []
+
+  fieldSchema.forEach((value, key) => {
     const liveKey = new String(key.substring(2))
     const matchedArrayLevel = liveKey.match(/\[\]/g)
     liveKey.nestedLevel = matchedArrayLevel != null
       ? matchedArrayLevel.length
       : 0
-    return liveKey
-  }).sort((a, b) => (a.nestedLevel !== b.nestedLevel)
-    ? (a.nestedLevel < b.nestedLevel ? -1 : 1)
-    : (a < b) ? -1 : 1
-  )
+    sortedFields.push(liveKey)
+  })
+
+  sortedFields.sort(sortByNestedLevel)
 
   const tablesSchemata = { }
 
-  for(const key of sortedFields) {
+  const sortedFieldsLength = sortedFields.length
+  for(let keyIndex = 0; keyIndex < sortedFieldsLength; keyIndex++) {
+    const key = sortedFields[keyIndex]
+
     const lastArrayPos = key.lastIndexOf('[]')
     const longestPrefix = lastArrayPos > -1 ? key.substring(0, lastArrayPos) : ''
     const fieldName = lastArrayPos > -1 ? key.substring(lastArrayPos + 2) : key
@@ -75,20 +93,20 @@ export const makeCreateTableBySchema = (schema, baseTableName) => {
     }
 
     let typeDecl = null
-    switch(fieldSchema[`$.${key}`]) {
-      case primitiveTypesMap[stringType]: {
+    switch(fieldSchema.get(`$.${key}`)) {
+      case primitiveTypesMap.get(stringType): {
         typeDecl = 'VARCHAR(700) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci'
         break
       }
-      case primitiveTypesMap[dateType]: {
+      case primitiveTypesMap.get(dateType): {
         typeDecl = 'DATETIME'
         break
       }
-      case primitiveTypesMap[numberType]: {
+      case primitiveTypesMap.get(numberType): {
         typeDecl = 'BIGINT'
         break
       }
-      case primitiveTypesMap[boolType]: {
+      case primitiveTypesMap.get(boolType): {
         typeDecl = 'BOOLEAN'
         break
       }
@@ -112,7 +130,7 @@ export const makeCreateTableBySchema = (schema, baseTableName) => {
       const fieldName = columnName.length > 0 ? columnName : '<INTERNAL>'
       sql += `  ${escapeId(fieldName)} ${tableSchema[columnName]} NULL, \n`
     }
-      
+
     sql += `  PRIMARY KEY(\`AggregateId\`), \n  INDEX USING BTREE(\`AggregateVersion\`)\n`
     sql += `);\n`
   }
@@ -120,19 +138,22 @@ export const makeCreateTableBySchema = (schema, baseTableName) => {
   return sql
 }
 
+const regexBrackets = /\[\]/g
+
 export const getTablesBySchema = (schema, baseTableName) => {
   const fieldSchema = validateAndFlattenSchema(schema)
-  const sortedFields = Object.keys(fieldSchema).map((key) => {
+  const sortedFields = []
+
+  fieldSchema.forEach((value, key) => {
     const liveKey = new String(key.substring(2))
-    const matchedArrayLevel = liveKey.match(/\[\]/g)
+    const matchedArrayLevel = liveKey.match(regexBrackets)
     liveKey.nestedLevel = matchedArrayLevel != null
       ? matchedArrayLevel.length
       : 0
-    return liveKey
-  }).sort((a, b) => (a.nestedLevel !== b.nestedLevel)
-    ? (a.nestedLevel < b.nestedLevel ? -1 : 1)
-    : (a < b) ? -1 : 1
-  )
+    sortedFields.push(liveKey)
+  })
+
+  sortedFields.sort(sortByNestedLevel)
 
   const tablesSchemata = { }
 
@@ -161,16 +182,16 @@ export const makeSaveDocument = (schema, aggregateId, baseTableName, document) =
   for(const tableName of allTableNames) {
     sql += `DELETE FROM ${escapeId(tableName)} WHERE ${escapeId('AggregateId')} = ${escape(aggregateId)};\n`
   }
-  
+
   for(const key of Object.keys(flatDocument)) {
     const pureKey = key.replace(/\.(\d+)($|\.)/ig, '[]$2')
-    const expectedType = fieldSchema[`$.${pureKey}`]
+    const expectedType = fieldSchema.get(`$.${pureKey}`)
 
     if(expectedType == null) {
-      throw new Error(`Document does not match schema ${pureKey}`) 
+      throw new Error(`Document does not match schema ${pureKey}`)
     }
     const value = flatDocument[key]
-    
+
     if(value != null && value.constructor !== expectedType) {
       throw new Error(`Incompatible type at ${pureKey} with ${value}`)
     }
@@ -182,7 +203,7 @@ export const makeSaveDocument = (schema, aggregateId, baseTableName, document) =
     liveKey.nestedLevel = matchedArrayLevel != null
       ? matchedArrayLevel.length
       : 0
-    
+
     liveKey.arrayLevel = matchedArrayLevel != null
       ? matchedArrayLevel.map(
         lev => Number(lev.substring(1, lev.length - 1))
@@ -191,10 +212,9 @@ export const makeSaveDocument = (schema, aggregateId, baseTableName, document) =
 
     liveKey.originalKey = key
     return liveKey
-  }).sort((a, b) => (a.nestedLevel !== b.nestedLevel)
-      ? (a.nestedLevel < b.nestedLevel ? -1 : 1)
-      : (a < b) ? -1 : 1
-  )
+  })
+
+  sortedFields.sort(sortByNestedLevel)
 
   const multiArrayIndexes = {}
   const tablesAffinity = {}

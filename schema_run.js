@@ -50,17 +50,16 @@ const document = {
   d: new Date()
 }
 
-for(let i=0; i< 1000000; i++) {
-  //console.log(
+
+  console.log(
     makeCreateTableBySchema(schema, 'Stories')
-  //)
+  )
 
-  //console.log(
+  console.log(
     makeSaveDocument(schema, 'AggId', 'Stories', document)
-  //)
+  )
 
-  //console.log(
+  console.log(
     makeLoadDocument(schema, 'AggId', 'Stories')
-  //)
+  )
 
-}
