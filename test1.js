@@ -10,14 +10,13 @@ import createApi, { S } from './read-api';
 
   const result = await api
     .table('testTable')
-    .find([
-      ['a', '=', `b`]
-    ])
+    .find([])
     .sort({
-      a: -1
+      a: 1
     })
-    .limit(3)
-    .skip(5);
+    .limit(3);
     
   console.log('result', result);
+
+  await api.close();
 })();
