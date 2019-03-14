@@ -5,6 +5,9 @@ export const stringType = Symbol('StringType')
 export const boolType = Symbol('BoolType')
 export const dateType = Symbol('DateType')
 
+const escapeId = str => `\`${str.replace(/[`\\]/ig, '\\$1')}\``
+const escape = str => `"${str.replace(/["\\]/ig, '\\$1')}"`
+
 const primitiveTypesMap = {
   [numberType]: Number,
   [stringType]: String,
@@ -44,41 +47,47 @@ export const validateAndFlattenSchema = (schema, path = '$') => {
 export const makeCreateTableBySchema = (schema, baseTableName) => {
   const fieldSchema = validateAndFlattenSchema(schema)
   const sortedFields = Object.keys(fieldSchema).map((key) => {
-    const liveKey = new String(key)
-    liveKey.nestedLevel = liveKey.match(/\[\]/g).length
+    const liveKey = new String(key.substring(2))
+    const matchedArrayLevel = liveKey.match(/\[\]/g)
+    liveKey.nestedLevel = matchedArrayLevel != null
+      ? matchedArrayLevel.length
+      : 0
     return liveKey
   }).sort((a, b) => (a.nestedLevel !== b.nestedLevel)
-      ? a.nestedLevel < b.nestedLevel
-      : a < b
+      ? a.nestedLevel > b.nestedLevel
+      : a > b
   )
 
-  const tablesSchemata = { [baseTableName]: {} }
+  const tablesSchemata = { }
 
   for(const key of sortedFields) {
     const lastArrayPos = key.lastIndexOf('[]')
     const longestPrefix = lastArrayPos > -1 ? key.substring(0, lastArrayPos) : ''
     const fieldName = lastArrayPos > -1 ? key.substring(lastArrayPos + 2) : key
-    
-    const tableName = `${baseTableName}-${longestPrefix}`
+
+    const tableName = longestPrefix.length > 0
+      ? `${baseTableName}-${longestPrefix}`
+      : baseTableName
+
     if (tablesSchemata[tableName] == null) {
       tablesSchemata[tableName] = {}
     }
 
     let typeDecl = null
-    switch(fieldSchema[key]) {
-      case stringType: {
+    switch(fieldSchema[`$.${key}`]) {
+      case primitiveTypesMap[stringType]: {
         typeDecl = 'VARCHAR(700) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci'
         break
       }
-      case dateType: {
+      case primitiveTypesMap[dateType]: {
         typeDecl = 'DATETIME'
         break
       }
-      case numberType: {
+      case primitiveTypesMap[numberType]: {
         typeDecl = 'BIGINT'
         break
       }
-      case boolType: {
+      case primitiveTypesMap[boolType]: {
         typeDecl = 'BOOLEAN'
         break
       }
@@ -93,13 +102,16 @@ export const makeCreateTableBySchema = (schema, baseTableName) => {
   let sql = ''
   for(const tableName of Object.keys(tablesSchemata)) {
     const tableSchema = tablesSchemata[tableName]
-    sql += `CREATE TABLE ${escapeId(tableName)} (\nRowId VARCHAR(64) NOT NULL, `
+    sql += `CREATE TABLE ${escapeId(tableName)}(\n  \`AggregateId\` VARCHAR(128) NOT NULL, \n`
+    sql += `  \`AggregateVersion\` BIGINT NOT NULL, \n`
 
-    for(const columnName of Object.keys(tableName)) {
-      sql += `${escapeId(columnName)} ${tableSchema[columnName]} NULL,`
+    for(const columnName of Object.keys(tableSchema)) {
+      const fieldName = columnName.length > 0 ? columnName : '<INTERNAL>'
+      sql += `  ${escapeId(fieldName)} ${tableSchema[columnName]} NULL, \n`
     }
       
-    sql += `PRIMARY KEY(RowId)\n)\n`
+    sql += `  PRIMARY KEY(\`AggregateId\`), \n  INDEX USING BTREE(\`AggregateVersion\`)\n`
+    sql += `)\n`
   }
 
   return sql
