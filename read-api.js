@@ -1,4 +1,4 @@
-import mysql from 'mysql2';
+import mysql, { escape, escapeId } from 'mysql2';
 
 const symbol = Symbol()
 
@@ -13,10 +13,21 @@ const getInitPromise = ({ promise }) =>
     promise[symbol].initResolve = async (continuation, ...args) => {
       initResolve()
       const result = await continuation(...args)
-      console.log('inner result', result);
       return result;
     }
   })
+
+const normalizeField = field => {
+  if (field.isLiteral) {
+    return escape(field.toString());
+  }
+
+  if (typeof field === 'string') {
+    return escapeId(field);
+  }
+
+  return escape(field);
+};
 
 const getSearchApi = (connection, tableName) => {
   let promiseResolve = null,
@@ -29,88 +40,71 @@ const getSearchApi = (connection, tableName) => {
   const pool = { promise }
 
   const init = async ({ promise }) => {
-    const result = await new Promise((resolve, reject) => {
-      const { extractFields, findCondition, sortFields, limitRows, skipRows } = promise[symbol];
+    try {
+      const result = await new Promise((resolve, reject) => {
+        const { extractFields, findCondition, sortFields, limitRows, skipRows } = promise[symbol];
 
-      const fields = [
-        extractFields == null ? '*' : extractFields,
-        tableName
-      ];
+        const queryParts = [
+          'SELECT',
+          extractFields == null ? '*' : extractFields.map(escapeId).join(', '),
+          'FROM',
+          escapeId(tableName)
+        ];
 
-      let conditionPart = '';
+        if (Array.isArray(findCondition) && findCondition.length > 0) {
+          const findParts = [];
 
-      if (findCondition != null) {
-        const conditionParts = [];
+          for (const [left, operator, right] of findCondition) {
+            if (Array.isArray(right)) {
+              const list = right
+                .map(normalizeField)
+                .join(', ');
 
-        for (const [left, operator, right] of findCondition) {
-          conditionParts.push('??', operator);
+              findParts.push(`${escapeId(left)} ${operator} (${list})`);
+            } else {
+              findParts.push(`${escapeId(left)} ${operator} ${normalizeField(right)}`);
+            }
+          }
 
-          if (typeof right === 'string' && !right.isLiteral) {
-            conditionParts.push('??');
+          queryParts.push('WHERE', findParts.join(' AND '));
+        }
+
+        if (sortFields != null) {
+          queryParts.push('ORDER BY');
+
+          for (const fieldName in sortFields) {
+            if (!sortFields.hasOwnProperty(fieldName)) {
+              continue;
+            }
+
+            queryParts.push(`${escapeId(fieldName)} ${sortFields[fieldName] === -1 ? 'DESC' : 'ASC'}`);
+          }
+        }
+
+        if (limitRows != null) {
+          queryParts.push(`LIMIT ${escape(limitRows)}`);
+        }
+
+        if (skipRows != null) {
+          queryParts.push(`OFFSET ${escape(skipRows)}`);
+        }
+
+        queryParts.push(';');
+        const query = queryParts.join(' ');
+
+        connection.query(query, (error, rows) => {
+          if (error) {
+            reject(error);
           } else {
-            conditionParts.push('?');
+            resolve(rows);
           }
-
-          fields.push(left, right);
-        }
-
-        conditionPart = ` WHERE ${conditionParts.join(' ')}`
-      }
-
-      let sortPart = ''
-
-      if (sortFields != null) {
-        const sortParts = [];
-
-        for (const fieldName in sortFields) {
-          if (!sortFields.hasOwnProperty(fieldName)) {
-            continue;
-          }
-
-          if (sortFields[fieldName] === -1) {
-            sortParts.push('?? DESC');
-          } else {
-            sortParts.push('?? ASC');
-          }
-
-          fields.push(fieldName);
-        }
-
-        sortPart = ` ORDER BY ${sortParts.join(', ')}`;
-      }
-
-      let limitPart = '';
-
-      if (limitRows != null) {
-        limitPart = ' LIMIT ?';
-        fields.push(limitRows);
-      }
-
-      let skipPart = '';
-
-      if (skipRows != null) {
-        skipPart = ' OFFSET ?';
-        fields.push(skipRows);
-      }
-
-      const query = [
-        'SELECT ?? FROM ??',
-        conditionPart,
-        sortPart,
-        limitPart,
-        skipPart
-      ].join('');
-
-      connection.query(query, fields, (error, rows) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(rows);
-        }
+        });
       });
-    });
-    
-    return result;
+      
+      promise[symbol].resolve(result);
+    } catch (e) {
+      promise[symbol].reject(e);
+    }
   };
 
   promise[symbol] = Object.create(null)
@@ -153,7 +147,7 @@ const getSearchApi = (connection, tableName) => {
     return promise
   }
 
-  promise[symbol].initPromise.then(init.bind(null, pool));
+  promise[symbol].initPromise.then(() => init(pool));
 
   const promiseThen = promise.then.bind(promise)
   const promiseCatch = promise.catch.bind(promise)
@@ -170,6 +164,9 @@ const getDbApi = (connectionParams) => {
   return {
     table(name) {
       return getSearchApi(connection, name);
+    },
+    async close() {
+      await connection.close();
     }
   }
 };
