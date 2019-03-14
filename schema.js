@@ -1,5 +1,6 @@
 import flat from 'flat'
 
+export const qualificationMark = Symbol('QualificationMark')
 export const numberType = Symbol('NumberType')
 export const stringType = Symbol('StringType')
 export const boolType = Symbol('BoolType')
@@ -161,6 +162,8 @@ export const makeSaveDocument = (schema, aggregateId, baseTableName, document) =
       : (a < b) ? -1 : 1
   )
 
+  const multiArrayIndexes = {}
+
   const tablesAffinity = {}
 
   for(const key of sortedFields) {
@@ -168,6 +171,8 @@ export const makeSaveDocument = (schema, aggregateId, baseTableName, document) =
     const lastArrayPos = pureKey.lastIndexOf('[]')
     const longestPrefix = lastArrayPos > -1 ? pureKey.substring(0, lastArrayPos) : ''
     const fieldName = lastArrayPos > -1 ? pureKey.substring(lastArrayPos + 2) : pureKey
+
+    const qualification = key.substr(0, key.lastIndexOf('['))
     
     const tableName = longestPrefix.length > 0
       ? `${baseTableName}-${longestPrefix}`
@@ -177,12 +182,21 @@ export const makeSaveDocument = (schema, aggregateId, baseTableName, document) =
       tablesAffinity[tableName] = []
     }
 
-    const documentIndex = key.arrayLevel != null
-    ? key.arrayLevel.reduce((acc, val) => acc * 100 + val, 1)
-    : 0
+    let documentIndex = 0
+    if(key.arrayLevel != null) {
+      const keyIdx = String(key.arrayLevel)
+      if(multiArrayIndexes[keyIdx] != null) {
+        documentIndex = multiArrayIndexes[keyIdx]
+      } else {
+        documentIndex = Object.keys(multiArrayIndexes).length + 1
+        multiArrayIndexes[keyIdx] = documentIndex
+      }
+    }
 
     if(tablesAffinity[tableName][documentIndex] == null) {
-      tablesAffinity[tableName][documentIndex] = {}
+      tablesAffinity[tableName][documentIndex] = {
+        [qualificationMark]: qualification
+      }
     }
 
     const targetDocument = tablesAffinity[tableName][documentIndex]
@@ -191,8 +205,6 @@ export const makeSaveDocument = (schema, aggregateId, baseTableName, document) =
 
     targetDocument[columnName] = flatDocument[key.originalKey]    
   }
-
-  console.log('@@@', tablesAffinity)
 
   let sql = ''
 
