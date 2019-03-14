@@ -221,8 +221,18 @@ export const makeSaveDocument = (schema, aggregateId, baseTableName, document) =
 
       sql += '\n) VALUES ( \n  '
       sql += `${escape(aggregateId)},\n  ${escape(row[leftPrefixMark])},  \n  `
+
       sql += fields.map(fieldName => {
-        return escape(row[fieldName])
+        switch(row[fieldName].constructor) {
+          case String: return escape(row[fieldName])
+          case Number: return +row[fieldName]
+          case Boolean: return row[fieldName] ? 1 : 0
+          case Date: return escape(row[fieldName].toISOString())
+          default: {
+            throw new Error(`Incorrect type at ${row[leftPrefixMark]}${fieldName}`)
+          }
+        }
+
       }).join(',\n  ')
 
       sql += '\n);\n'
