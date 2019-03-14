@@ -1,9 +1,9 @@
 import flat from 'flat'
 
-const numberType = Symbol('NumberType')
-const stringType = Symbol('StringType')
-const boolType = Symbol('BoolType')
-const dateType = Symbol('DateType')
+export const numberType = Symbol('NumberType')
+export const stringType = Symbol('StringType')
+export const boolType = Symbol('BoolType')
+export const dateType = Symbol('DateType')
 
 const primitiveTypesMap = {
   [numberType]: Number,
@@ -12,28 +12,28 @@ const primitiveTypesMap = {
   [dateType]: Date
 }
 
-const validateAndFlattenSchema = (schema, path = '$') => {
+export const validateAndFlattenSchema = (schema, path = '$') => {
   if(schema == null || schema.constructor !== Object) {
-    throw new Error(`Wrong schema at ${path} - contain ${schema}`)
+    throw new Error(`Wrong schema at ${path} - contain ${JSON.stringify(schema)}`)
   }
   const fields = {}
 
   for(const key of Object.keys(schema)) {
-    if (primitiveTypes.hasOwnProperty(schema[key])) {
+    if (typeof schema[key] === 'symbol' && primitiveTypesMap[schema[key]] != null) {
       fields[`${path}.${key}`] = primitiveTypesMap[schema[key]]
-    } else if(
-      Array.isArray(schema[key]) &&
-      schema[key].length === 2 &&
-      Number.isSafeInteger(schema[key][1])
-    ) {
-      Object.assign(
-        fields,
-        validateSchema(schema[key][0], `${path}.${key}[]`)
-      )
+    } else if(Array.isArray(schema[key]) && schema[key].length === 1) {
+      if(typeof schema[key][0] === 'symbol' && primitiveTypesMap[schema[key][0]] != null) {
+        fields[`${path}.${key}[]`] = primitiveTypesMap[schema[key][0]]
+      } else {
+        Object.assign(
+          fields,
+          validateAndFlattenSchema(schema[key][0], `${path}.${key}[]`)
+        )
+      }
     } else {
       Object.assign(
         fields,
-        validateSchema(schema[key], `${path}.${key}`)
+        validateAndFlattenSchema(schema[key], `${path}.${key}`)
       )
     }
   }
@@ -41,7 +41,7 @@ const validateAndFlattenSchema = (schema, path = '$') => {
   return fields
 }
 
-const makeCreateTableBySchema = (schema, baseTableName) => {
+export const makeCreateTableBySchema = (schema, baseTableName) => {
   const fieldSchema = validateAndFlattenSchema(schema)
   const sortedFields = Object.keys(fieldSchema).map((key) => {
     const liveKey = new String(key)
@@ -60,7 +60,7 @@ const makeCreateTableBySchema = (schema, baseTableName) => {
     const fieldName = lastArrayPos > -1 ? key.substring(lastArrayPos + 2) : key
     
     const tableName = `${baseTableName}-${longestPrefix}`
-    if (!tablesSchemata.hasOwnProperty(tableName)) {
+    if (tablesSchemata[tableName] == null) {
       tablesSchemata[tableName] = {}
     }
 
@@ -105,13 +105,13 @@ const makeCreateTableBySchema = (schema, baseTableName) => {
   return sql
 }
 
-const validateAndFlatDocumentSchema = (schema, document) => {
+export const validateAndFlatDocumentSchema = (schema, document) => {
   const fieldSchema = validateAndFlattenSchema(schema)
   const flatDocument = flat(document)
   
   for(const key of Object.keys(flatDocument)) {
     const pureKey = key.replace(/\.(\d+)($|\.)/ig, '[]$2')
-    if(fieldSchema.hasOwnProperty(`$.${pureKey}`)) {
+    if(fieldSchema[`$.${pureKey}`] == null) {
       throw new Error(`Document does not match schema ${pureKey}`) 
     }
 
