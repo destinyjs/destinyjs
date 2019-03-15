@@ -1,20 +1,42 @@
 import createApi, { S } from './read-api';
 
-(async () => {
+import {
+  numberType,
+  stringType,
+  boolType,
+  dateType
+} from './schema'
+
+const schema = {
+  a: {
+    aa: numberType,
+    ab: stringType
+  },
+  b: {
+      ba: numberType,
+      bb: stringType,
+      bc: {
+        bca: numberType,
+        bcb: stringType
+      }
+  },
+  c: boolType,
+  d: dateType
+}
+
+;(async () => {
   const api = createApi({
     host: '127.0.0.1',
     user: 'root',
     password: '',
-    database: 'testDatabase'
+    database: 'hk'
   });
 
   const result = await api
-    .table('testTable')
-    .find([])
-    .sort({
-      a: 1
-    })
-    .limit(3);
+    .table('Stories', schema)
+    .find([
+      ['a.ab', '=', S`Qwerty`]
+    ]);
     
   console.log('result', result);
 
