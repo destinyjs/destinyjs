@@ -1,14 +1,14 @@
-import { flatten, unflatten } from 'flat'
+const { flatten, unflatten } = require('flat')
 
-export const leftPrefixMark = Symbol('LeftPrefixMark')
-export const numberType = Symbol('NumberType')
-export const stringType = Symbol('StringType')
-export const boolType = Symbol('BoolType')
-export const dateType = Symbol('DateType')
+const numberType = Symbol('NumberType')
+const stringType = Symbol('StringType')
+const boolType = Symbol('BoolType')
+const dateType = Symbol('DateType')
 
 const escapeId = str => `\`${String(str).replace(/[`\\]/ig, '\\$1')}\``
 const escape = str => `"${String(str).replace(/["\\]/ig, '\\$1')}"`
 const internalTableKey = '.INTERNAL.'
+const leftPrefixMark = Symbol('LeftPrefixMark')
 
 const primitiveTypesMap = new Map([
   [numberType, Number],
@@ -17,7 +17,7 @@ const primitiveTypesMap = new Map([
   [dateType, Date]
 ])
 
-export const validateAndFlattenSchema = (pool, schema, path = '$') => {
+const validateAndFlattenSchema = (pool, schema, path = '$') => {
   if(path === '$') {
     pool.flatSchemaMap = pool.flatSchemaMap != null ? pool.flatSchemaMap : new Map()
     if(pool.flatSchemaMap.has(schema)) {
@@ -70,7 +70,7 @@ const sortByNestedLevel = (a, b) => (a.nestedLevel !== b.nestedLevel)
     ? (a.nestedLevel < b.nestedLevel ? -1 : 1)
     : (a < b) ? -1 : 1
 
-export const makeCreateTableBySchema = (pool, schema, baseTableName) => {
+const makeCreateTableBySchema = (pool, schema, baseTableName) => {
   pool.tableCreation = pool.tableCreation != null ? pool.tableCreation : new Map()
   if(pool.tableCreation.has(schema)) {
     return pool.tableCreation.get(schema)
@@ -161,7 +161,7 @@ export const makeCreateTableBySchema = (pool, schema, baseTableName) => {
 
 const regexBrackets = /\[\]/g
 
-export const getTablesBySchema = (pool, schema, baseTableName) => {
+const getTablesBySchema = (pool, schema, baseTableName) => {
   pool.tablesSchema = pool.tablesSchema != null ? pool.tablesSchema : new Map()
   if(pool.tablesSchema.has(schema)) {
     return pool.tablesSchema.get(schema)
@@ -204,7 +204,7 @@ export const getTablesBySchema = (pool, schema, baseTableName) => {
   return tablesSchemata
 }
 
-export const makeSaveDocument = (pool, schema, aggregateId, baseTableName, document) => {
+const makeSaveDocument = (pool, schema, aggregateId, baseTableName, document) => {
   const fieldSchema = validateAndFlattenSchema(pool, schema)
   const flatDocument = flatten(document)
 
@@ -327,7 +327,7 @@ export const makeSaveDocument = (pool, schema, aggregateId, baseTableName, docum
   return sql
 }
 
-export const makeLoadDocument = (pool, schema, aggregateId, baseTableName) => {
+const makeLoadDocument = (pool, schema, aggregateId, baseTableName) => {
   const tablesSchemata = getTablesBySchema(pool, schema, baseTableName)
   const allTableNames = Object.keys(tablesSchemata)
   const allFields = new Set()
@@ -362,7 +362,7 @@ export const makeLoadDocument = (pool, schema, aggregateId, baseTableName) => {
   return sql
 }
 
-export const vivificateJsonBySchema = (pool, schema, resultSet, baseTableName) => {
+const vivificateJsonBySchema = (pool, schema, resultSet, baseTableName) => {
   const tablesSchemata = getTablesBySchema(pool, schema, baseTableName)
   const unflattenDocument = {}
   const lastArrayIndexesByTable = {}
@@ -406,4 +406,15 @@ export const vivificateJsonBySchema = (pool, schema, resultSet, baseTableName) =
   const result = unflatten(unflattenDocument)
 
   return result
+}
+
+module.exports = {
+  makeCreateTableBySchema,
+  makeSaveDocument,
+  makeLoadDocument,
+  vivificateJsonBySchema,
+  numberType,
+  stringType,
+  boolType,
+  dateType
 }
