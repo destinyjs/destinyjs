@@ -4,6 +4,7 @@ import {
   makeCreateTableBySchema,
   makeSaveDocument,
   makeLoadDocument,
+  vivificateJsonBySchema,
   numberType,
   stringType,
   boolType,
@@ -69,10 +70,10 @@ const main = async () => {
   await connection.query(saveDocumentDeclaration)
 
   const loadDocumentDeclataion = makeLoadDocument(schema, 'AggId', 'Stories')
-  const [rows] = await connection.query(loadDocumentDeclataion)
+  const rowList = await connection.query(loadDocumentDeclataion)
 
-  console.log(rows)
-
+  const originalDocument = vivificateJsonBySchema(rowList, 'Stories')
+  console.log(originalDocument)
 }
 
 main()

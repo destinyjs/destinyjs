@@ -163,6 +163,7 @@ export const getTablesBySchema = (schema, baseTableName) => {
   for(const key of sortedFields) {
     const lastArrayPos = key.lastIndexOf('[]')
     const longestPrefix = lastArrayPos > -1 ? key.substring(0, lastArrayPos) : ''
+    const fieldName = lastArrayPos > -1 ? key.substring(lastArrayPos + 2) : key
 
     const tableName = longestPrefix.length > 0
       ? `${baseTableName}-${longestPrefix}`
@@ -171,16 +172,18 @@ export const getTablesBySchema = (schema, baseTableName) => {
     if (tablesSchemata[tableName] == null) {
       tablesSchemata[tableName] = {}
     }
+
+    tablesSchemata[tableName][fieldName] = fieldSchema.get(`$.${key}`)
   }
 
-  return Object.keys(tablesSchemata)
+  return tablesSchemata
 }
 
 export const makeSaveDocument = (schema, aggregateId, baseTableName, document) => {
   const fieldSchema = validateAndFlattenSchema(schema)
   const flatDocument = flatten(document)
 
-  const allTableNames = getTablesBySchema(schema, baseTableName)
+  const allTableNames = Object.keys(getTablesBySchema(schema, baseTableName))
   let sql = ''
   for(const tableName of allTableNames) {
     sql += `DELETE FROM ${escapeId(tableName)} WHERE ${escapeId('AggregateId')} = ${escape(aggregateId)};\n`
@@ -300,21 +303,42 @@ export const makeSaveDocument = (schema, aggregateId, baseTableName, document) =
 }
 
 export const makeLoadDocument = (schema, aggregateId, baseTableName) => {
-  const allTableNames = getTablesBySchema(schema, baseTableName)
-  let sql = 'SELECT '
-  sql += allTableNames.map(tableName => `${escapeId(tableName)}.*`).join(',\n  ')
-  sql += 'FROM '
-  sql += allTableNames.map(tableName => `${escapeId(tableName)}`).join(',\n  ')
-  sql += `WHERE `
-  sql += allTableNames.map(tableName => `${escapeId(tableName)}.\`AggregateId\` = ${
-    escape(aggregateId)
-  }`).join(' AND\n  ')
-  sql += ';'
+  const tablesSchemata = getTablesBySchema(schema, baseTableName)
+  const allTableNames = Object.keys(tablesSchemata)
+  const allFields = new Set()
+
+  for(const tableName of allTableNames) {
+    for(const key of Object.keys(tablesSchemata[tableName])) {
+      const columnName = key.length > 0 ? key : '<INTERNAL>'
+      allFields.add(columnName)
+    }
+  }
+
+  let sql = ''
+  for(const tableName of allTableNames) {
+    sql += `(SELECT \`AggregateId\`, \`LeftPrefix\`, `
+    for(const key of allFields.values()) {
+      if(tablesSchemata[tableName][key] != null) {
+        sql += `  ${escapeId(key)} AS ${escapeId(key)},\n`
+      } else {
+        sql += `  NULL AS ${escapeId(key)},\n`
+      }
+    }
+
+      sql += `  ${escape(tableName)} AS \`SourceTableName\`\n`
+      sql += `FROM ${escapeId(tableName)}\n`
+      sql += `WHERE \`AggregateId\` = ${escape(aggregateId)}\n`
+
+      sql += `)\nUNION ALL\n`
+  }
+  
+  sql = sql.substring(0, sql.length - 10)
 
   return sql
 }
 
 export const vivificateJsonBySchema = (rowList, baseTableName) => {
+  console.log('@@@', rowList)
   const unflattenDocument = {}
   const lastArrayIndexesByTable = {}
 
