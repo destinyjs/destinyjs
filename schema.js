@@ -318,7 +318,7 @@ export const makeLoadDocument = (schema, aggregateId, baseTableName) => {
   for(const tableName of allTableNames) {
     sql += `(SELECT \`AggregateId\`, \`LeftPrefix\`, `
     for(const key of allFields.values()) {
-      if(tablesSchemata[tableName][key] != null) {
+      if(tablesSchemata[tableName][key !== '<INTERNAL>' ? key : ''] != null) {
         sql += `  ${escapeId(key)} AS ${escapeId(key)},\n`
       } else {
         sql += `  NULL AS ${escapeId(key)},\n`
@@ -337,7 +337,8 @@ export const makeLoadDocument = (schema, aggregateId, baseTableName) => {
   return sql
 }
 
-export const vivificateJsonBySchema = (resultSet, baseTableName) => {
+export const vivificateJsonBySchema = (schema, resultSet, baseTableName) => {
+  const tablesSchemata = getTablesBySchema(schema, baseTableName)
   const unflattenDocument = {}
   const lastArrayIndexesByTable = {}
   const [rowList] = resultSet
@@ -345,13 +346,20 @@ export const vivificateJsonBySchema = (resultSet, baseTableName) => {
   for(const row of rowList) {
     const { AggregateId, LeftPrefix, SourceTableName, ...fields } = row
     for(const fieldName of Object.keys(fields)) {
+      const columnName = fieldName !== '<INTERNAL>' ? fieldName : ''
       const value = fields[fieldName]
 
+      if(tablesSchemata[SourceTableName][columnName] == null) {
+        continue
+      }
+
       if(SourceTableName === baseTableName) {
-        unflattenDocument[fieldName] = value
+        unflattenDocument[columnName] = value
         unflattenDocument.aggregateId = AggregateId
       } else {
-        const uniqueIndex = `${LeftPrefix}[].${fieldName}`
+        const uniqueIndex = `${LeftPrefix}[]${
+          columnName.length > 0 ? `.${columnName}` : ''
+        }`
 
         if(lastArrayIndexesByTable[uniqueIndex] == null) {
           lastArrayIndexesByTable[uniqueIndex] = 0
@@ -359,7 +367,10 @@ export const vivificateJsonBySchema = (resultSet, baseTableName) => {
 
         const idx = lastArrayIndexesByTable[uniqueIndex]++
 
-        const compoundKey = `${LeftPrefix}[${idx}].${fieldName}`
+        const compoundKey = `${LeftPrefix}[${idx}]${
+          columnName.length > 0 ? `.${columnName}` : ''
+        }`
+
         const unflattenKey = compoundKey.replace(/\[(\d+)\]/, '.$1')
 
         unflattenDocument[unflattenKey] = value
