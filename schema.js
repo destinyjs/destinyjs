@@ -370,7 +370,7 @@ export const vivificateJsonBySchema = (schema, resultSet, baseTableName) => {
           columnName.length > 0 ? `.${columnName}` : ''
         }`
 
-        const unflattenKey = compoundKey.replace(/\[(\d+)\]/, '.$1')
+        const unflattenKey = compoundKey.replace(/\[(\d+)\]/ig, '.$1')
 
         unflattenDocument[unflattenKey] = value
       }
