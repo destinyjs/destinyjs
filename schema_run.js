@@ -1,4 +1,5 @@
 import mysql from 'mysql2/promise'
+import stringify from 'json-stable-stringify'
 
 import {
   makeCreateTableBySchema,
@@ -73,7 +74,8 @@ const main = async () => {
   const rowList = await connection.query(loadDocumentDeclataion)
 
   const originalDocument = vivificateJsonBySchema(schema, rowList, 'Stories')
-  console.log(JSON.stringify(originalDocument))
+  console.log(stringify(originalDocument))
+  console.log(stringify(document))
 }
 
 main()

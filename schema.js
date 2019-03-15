@@ -355,7 +355,6 @@ export const vivificateJsonBySchema = (schema, resultSet, baseTableName) => {
 
       if(SourceTableName === baseTableName) {
         unflattenDocument[columnName] = value
-        unflattenDocument.aggregateId = AggregateId
       } else {
         const uniqueIndex = `${LeftPrefix}[]${
           columnName.length > 0 ? `.${columnName}` : ''
