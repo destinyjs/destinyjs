@@ -64,7 +64,9 @@ const main = async () => {
     port: 3306
   })
 
-  const iterations = 100000
+  const iterations = 10
+  const parallels = 100
+
   const pool = {}
   const tablesDeclaration = makeCreateTableBySchema(pool, schema, 'Stories')
   await connection.query(tablesDeclaration)
@@ -72,26 +74,35 @@ const main = async () => {
 
   dt1 = Date.now()
   for(let i = 0; i < iterations; i++) {
-    const saveDocumentDeclaration = makeSaveDocument(pool, schema, 'AggId', 'Stories', document)
-    // await connection.query(saveDocumentDeclaration)
+    const promises = []
+    for(let k = 0; k < parallels; k++) {
+      promises.push(connection.query(makeSaveDocument(pool, schema, 'AggId', 'Stories', document)))
+    }
+    await Promise.all(promises)
   }
 
   dt2 = Date.now()
-  ops = (iterations / (dt2 - dt1)) * 1000
+  ops = (iterations / (dt2 - dt1)) * 1000 * parallels
   console.log(`Avarage ${ops} write ops per second`)
 
 
-  const rowList = [[{"AggregateId":"AggId","LeftPrefix":"","a.ab":"Qwerty","c":1,"d":"2019-03-15T07:55:00.000Z",".INTERNAL.":null,"ba":null,"bb":null,"bca":null,"bcb":null,"SourceTableName":"Stories"},{"AggregateId":"AggId","LeftPrefix":"a.aa","a.ab":null,"c":null,"d":null,".INTERNAL.":11,"ba":null,"bb":null,"bca":null,"bcb":null,"SourceTableName":"Stories-a.aa"},{"AggregateId":"AggId","LeftPrefix":"a.aa","a.ab":null,"c":null,"d":null,".INTERNAL.":22,"ba":null,"bb":null,"bca":null,"bcb":null,"SourceTableName":"Stories-a.aa"},{"AggregateId":"AggId","LeftPrefix":"a.aa","a.ab":null,"c":null,"d":null,".INTERNAL.":33,"ba":null,"bb":null,"bca":null,"bcb":null,"SourceTableName":"Stories-a.aa"},{"AggregateId":"AggId","LeftPrefix":"a.aa","a.ab":null,"c":null,"d":null,".INTERNAL.":44,"ba":null,"bb":null,"bca":null,"bcb":null,"SourceTableName":"Stories-a.aa"},{"AggregateId":"AggId","LeftPrefix":"b","a.ab":null,"c":null,"d":null,".INTERNAL.":null,"ba":10,"bb":"Text","bca":null,"bcb":null,"SourceTableName":"Stories-b"},{"AggregateId":"AggId","LeftPrefix":"b[0].bc","a.ab":null,"c":null,"d":null,".INTERNAL.":null,"ba":null,"bb":null,"bca":100,"bcb":"AAA","SourceTableName":"Stories-b[].bc"},{"AggregateId":"AggId","LeftPrefix":"b[0].bc","a.ab":null,"c":null,"d":null,".INTERNAL.":null,"ba":null,"bb":null,"bca":200,"bcb":"BBB","SourceTableName":"Stories-b[].bc"}], []]
+  // const rowList = [[{"AggregateId":"AggId","LeftPrefix":"","a.ab":"Qwerty","c":1,"d":"2019-03-15T07:55:00.000Z",".INTERNAL.":null,"ba":null,"bb":null,"bca":null,"bcb":null,"SourceTableName":"Stories"},{"AggregateId":"AggId","LeftPrefix":"a.aa","a.ab":null,"c":null,"d":null,".INTERNAL.":11,"ba":null,"bb":null,"bca":null,"bcb":null,"SourceTableName":"Stories-a.aa"},{"AggregateId":"AggId","LeftPrefix":"a.aa","a.ab":null,"c":null,"d":null,".INTERNAL.":22,"ba":null,"bb":null,"bca":null,"bcb":null,"SourceTableName":"Stories-a.aa"},{"AggregateId":"AggId","LeftPrefix":"a.aa","a.ab":null,"c":null,"d":null,".INTERNAL.":33,"ba":null,"bb":null,"bca":null,"bcb":null,"SourceTableName":"Stories-a.aa"},{"AggregateId":"AggId","LeftPrefix":"a.aa","a.ab":null,"c":null,"d":null,".INTERNAL.":44,"ba":null,"bb":null,"bca":null,"bcb":null,"SourceTableName":"Stories-a.aa"},{"AggregateId":"AggId","LeftPrefix":"b","a.ab":null,"c":null,"d":null,".INTERNAL.":null,"ba":10,"bb":"Text","bca":null,"bcb":null,"SourceTableName":"Stories-b"},{"AggregateId":"AggId","LeftPrefix":"b[0].bc","a.ab":null,"c":null,"d":null,".INTERNAL.":null,"ba":null,"bb":null,"bca":100,"bcb":"AAA","SourceTableName":"Stories-b[].bc"},{"AggregateId":"AggId","LeftPrefix":"b[0].bc","a.ab":null,"c":null,"d":null,".INTERNAL.":null,"ba":null,"bb":null,"bca":200,"bcb":"BBB","SourceTableName":"Stories-b[].bc"}], []]
 
   dt1 = Date.now()
   for(let i = 0; i < iterations; i++) {
-    const loadDocumentDeclataion = makeLoadDocument(pool, schema, 'AggId', 'Stories')
-    // const rowList = await connection.query(loadDocumentDeclataion)
-    const originalDocument = vivificateJsonBySchema(pool, schema, rowList, 'Stories')
+    const promises = []
+    for(let k = 0; k < parallels; k++) {
+      promises.push(
+        connection.query(makeLoadDocument(pool, schema, 'AggId', 'Stories')).then(
+          rowList => vivificateJsonBySchema(pool, schema, rowList, 'Stories')
+        )
+      )
+    }
+    await Promise.all(promises)
   }
 
   dt2 = Date.now()
-  ops = (iterations / (dt2 - dt1)) * 1000
+  ops = (iterations / (dt2 - dt1)) * 1000 * parallels
   console.log(`Avarage ${ops} read ops per second`)
 
   process.exit(0)

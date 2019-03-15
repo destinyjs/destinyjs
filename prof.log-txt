@@ -1,201 +1,142 @@
-Statistical profiling result from isolate-00000185835123C0-v8.log, (17045 ticks, 32 unaccounted, 0 excluded).
+Statistical profiling result from isolate-000001567A483B00-v8.log, (9415 ticks, 141 unaccounted, 0 excluded).
 
  [Shared libraries]:
    ticks  total  nonlib   name
-  15756   92.4%          C:\WINDOWS\SYSTEM32\ntdll.dll
-    769    4.5%          C:\Program Files\nodejs\node.exe
-     14    0.1%          C:\WINDOWS\System32\KERNEL32.DLL
-     11    0.1%          C:\WINDOWS\System32\WS2_32.dll
-      6    0.0%          C:\WINDOWS\System32\KERNELBASE.dll
-      5    0.0%          C:\WINDOWS\system32\mswsock.dll
+   5576   59.2%          C:\Program Files\nodejs\node.exe
+    925    9.8%          C:\WINDOWS\SYSTEM32\ntdll.dll
+     10    0.1%          C:\WINDOWS\System32\KERNELBASE.dll
+      6    0.1%          C:\WINDOWS\System32\KERNEL32.DLL
+      2    0.0%          C:\WINDOWS\SYSTEM32\WINMM.dll
+      1    0.0%          C:\WINDOWS\System32\RPCRT4.dll
 
  [JavaScript]:
    ticks  total  nonlib   name
-     38    0.2%    7.9%  Builtin: InterpreterEntryTrampoline
-     23    0.1%    4.8%  LazyCompile: ~handlePacket C:\Users\vladv\destinyjs\node_modules\mysql2\lib\connection.js:388:15
-     18    0.1%    3.7%  Builtin: CallFunction_ReceiverIsAny
-     14    0.1%    2.9%  LoadIC: A load IC from the snapshot
-     13    0.1%    2.7%  LazyCompile: *onread net.js:583:16
-     12    0.1%    2.5%  LazyCompile: ~insert timers.js:167:16
-     12    0.1%    2.5%  KeyedLoadIC: A keyed load IC from the snapshot
-     12    0.1%    2.5%  Builtin: KeyedLoadIC_Megamorphic
-     10    0.1%    2.1%  Stub: StringAddStub
-     10    0.1%    2.1%  Stub: GetPropertyStub
-     10    0.1%    2.1%  Builtin: Call_ReceiverIsAny
-      7    0.0%    1.4%  StoreIC: A store IC from the snapshot
-      5    0.0%    1.0%  LazyCompile: ~fromString buffer.js:298:20
-      5    0.0%    1.0%  LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:33
-      5    0.0%    1.0%  LazyCompile: *Readable.read _stream_readable.js:365:35
-      5    0.0%    1.0%  Builtin: JSConstructStubGenericUnrestrictedReturn
-      5    0.0%    1.0%  Builtin: ArgumentsAdaptorTrampoline
-      4    0.0%    0.8%  LazyCompile: ~byteLength buffer.js:475:20
-      4    0.0%    0.8%  LazyCompile: ~InnerArraySort native array.js:529:24
-      4    0.0%    0.8%  LazyCompile: *readLengthCodedNumber C:\Users\vladv\destinyjs\node_modules\mysql2\lib\packets\packet.js:183:24
-      4    0.0%    0.8%  LazyCompile: *emit events.js:156:44
-      4    0.0%    0.8%  LazyCompile: *ResultSetHeader C:\Users\vladv\destinyjs\node_modules\mysql2\lib\packets\resultset_header.js:13:14
-      4    0.0%    0.8%  KeyedStoreIC: A keyed store IC from the snapshot
-      4    0.0%    0.8%  Builtin: RegExpPrototypeMatch
-      4    0.0%    0.8%  Builtin: KeyedStoreIC_Megamorphic
-      4    0.0%    0.8%  Builtin: FastNewClosure
-      3    0.0%    0.6%  LoadGlobalIC: A load global IC from the snapshot
-      3    0.0%    0.6%  LazyCompile: ~shift C:\Users\vladv\destinyjs\node_modules\denque\index.js:116:40
-      3    0.0%    0.6%  LazyCompile: ~resultsetHeader C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\query.js:103:18
-      3    0.0%    0.6%  LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
-      3    0.0%    0.6%  LazyCompile: ~emitPendingUnhandledRejections internal/process/promises.js:100:42
-      3    0.0%    0.6%  LazyCompile: ~EventEmitter.init events.js:62:29
-      3    0.0%    0.6%  LazyCompile: ~Buffer.readUInt16LE buffer.js:1020:41
-      3    0.0%    0.6%  LazyCompile: ~<anonymous> native typedarray.js:937:48
-      3    0.0%    0.6%  LazyCompile: *resultsetHeader C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\query.js:103:18
-      3    0.0%    0.6%  LazyCompile: *readField C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\query.js:180:12
-      3    0.0%    0.6%  KeyedLoadIC: A keyed load IC from the snapshot {1}
-      3    0.0%    0.6%  Builtin: SetAdd
-      3    0.0%    0.6%  Builtin: Construct {1}
-      2    0.0%    0.4%  Stub: RecordWriteStub
-      2    0.0%    0.4%  Stub: JSEntryStub
-      2    0.0%    0.4%  Stub: CEntryStub {1}
-      2    0.0%    0.4%  Stub: ArraySingleArgumentConstructorStub
-      2    0.0%    0.4%  RegExp: \\schanged:\\s*(\\d+)
-      2    0.0%    0.4%  RegExp: \\.(\\d+)($|\\.)
-      2    0.0%    0.4%  RegExp: [`\\\\]
-      2    0.0%    0.4%  RegExp: [TZ]
-      2    0.0%    0.4%  LazyCompile: ~toPacket C:\Users\vladv\destinyjs\node_modules\mysql2\lib\packets\query.js:15:11
-      2    0.0%    0.4%  LazyCompile: ~query C:\Users\vladv\destinyjs\node_modules\mysql2\promise.js:90:8
-      2    0.0%    0.4%  LazyCompile: ~query C:\Users\vladv\destinyjs\node_modules\mysql2\lib\connection.js:524:8
-      2    0.0%    0.4%  LazyCompile: ~process.nextTick C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\query.js:71:26
-      2    0.0%    0.4%  LazyCompile: ~peekByte C:\Users\vladv\destinyjs\node_modules\mysql2\lib\packets\packet.js:660:11
-      2    0.0%    0.4%  LazyCompile: ~onwrite _stream_writable.js:431:17
-      2    0.0%    0.4%  LazyCompile: ~maybeReadMore_ _stream_readable.js:531:24
-      2    0.0%    0.4%  LazyCompile: ~match native string.js:12:6
-      2    0.0%    0.4%  LazyCompile: ~makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:33
-      2    0.0%    0.4%  LazyCompile: ~makeLoadDocument C:\Users\vladv\destinyjs\schema.js:330:33
-      2    0.0%    0.4%  LazyCompile: ~format C:\Users\vladv\destinyjs\node_modules\mysql2\lib\connection.js:478:9
-      2    0.0%    0.4%  LazyCompile: ~createWriteReq net.js:790:24
-      2    0.0%    0.4%  LazyCompile: ~afterWrite _stream_writable.js:459:20
-      2    0.0%    0.4%  LazyCompile: ~Socket._writeGeneric net.js:715:42
-      2    0.0%    0.4%  LazyCompile: ~Connection.stream.on.data C:\Users\vladv\destinyjs\node_modules\mysql2\lib\connection.js:74:28
-      2    0.0%    0.4%  LazyCompile: *vivificateJsonBySchema C:\Users\vladv\destinyjs\schema.js:365:39
-      2    0.0%    0.4%  LazyCompile: *step C:\Users\vladv\destinyjs\node_modules\flat\index.js:14:17
-      2    0.0%    0.4%  LazyCompile: *nextTick internal/process/next_tick.js:246:20
-      2    0.0%    0.4%  LazyCompile: *makeLoadDocument C:\Users\vladv\destinyjs\schema.js:330:33
-      2    0.0%    0.4%  LazyCompile: *_tickDomainCallback internal/process/next_tick.js:194:31
-      2    0.0%    0.4%  LazyCompile: *QuickSort native array.js:573:19
-      2    0.0%    0.4%  LazyCompile: *Connection.stream.on.data C:\Users\vladv\destinyjs\node_modules\mysql2\lib\connection.js:74:28
-      2    0.0%    0.4%  LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:73:31
-      2    0.0%    0.4%  Builtin: StringIndexOf
-      2    0.0%    0.4%  Builtin: ObjectPrototypeToString
-      2    0.0%    0.4%  Builtin: LoadIC_Noninlined
-      2    0.0%    0.4%  Builtin: GreaterThan
-      2    0.0%    0.4%  Builtin: FastArrayPush
-      2    0.0%    0.4%  Builtin: CompileLazy
-      2    0.0%    0.4%  Builtin: CallFunction_ReceiverIsNullOrUndefined
-      1    0.0%    0.2%  Stub: RecordWriteStub {1}
-      1    0.0%    0.2%  Stub: CallApiCallbackStub
-      1    0.0%    0.2%  RegExp: ["\\\\]
-      1    0.0%    0.2%  LoadIC: A load IC from the snapshot {1}
-      1    0.0%    0.2%  LoadGlobalIC: A load global IC from the snapshot {1}
-      1    0.0%    0.2%  LazyCompile: ~writePacket C:\Users\vladv\destinyjs\node_modules\mysql2\lib\connection.js:249:14
-      1    0.0%    0.2%  LazyCompile: ~uu C:\Users\vladv\destinyjs\node_modules\esm\esm.js:1:222258
-      1    0.0%    0.2%  LazyCompile: ~stripBOM internal/module.js:44:18
-      1    0.0%    0.2%  LazyCompile: ~start C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\query.js:44:8
-      1    0.0%    0.2%  LazyCompile: ~sort native array.js:748:46
-      1    0.0%    0.2%  LazyCompile: ~slice buffer.js:966:40
-      1    0.0%    0.2%  LazyCompile: ~row C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\query.js:219:6
-      1    0.0%    0.2%  LazyCompile: ~readLengthCodedNumberSigned C:\Users\vladv\destinyjs\node_modules\mysql2\lib\packets\packet.js:191:30
-      1    0.0%    0.2%  LazyCompile: ~push internal/process/next_tick.js:20:7
-      1    0.0%    0.2%  LazyCompile: ~pu C:\Users\vladv\destinyjs\node_modules\esm\esm.js:1:223942
-      1    0.0%    0.2%  LazyCompile: ~nextTick internal/process/next_tick.js:246:20
-      1    0.0%    0.2%  LazyCompile: ~loaded C:\Users\vladv\destinyjs\node_modules\esm\esm.js:1:266177
-      1    0.0%    0.2%  LazyCompile: ~keyFromFields C:\Users\vladv\destinyjs\node_modules\mysql2\lib\parsers\parser_cache.js:9:23
-      1    0.0%    0.2%  LazyCompile: ~isError C:\Users\vladv\destinyjs\node_modules\mysql2\lib\packets\packet.js:670:10
-      1    0.0%    0.2%  LazyCompile: ~innerFail assert.js:42:19
-      1    0.0%    0.2%  LazyCompile: ~getTablesBySchema C:\Users\vladv\destinyjs\schema.js:164:34
-      1    0.0%    0.2%  LazyCompile: ~get domain.js:43:16
-      1    0.0%    0.2%  LazyCompile: ~get C:\Users\vladv\destinyjs\node_modules\esm\esm.js:1:209057
-      1    0.0%    0.2%  LazyCompile: ~fs.readFileSync fs.js:548:27
-      1    0.0%    0.2%  LazyCompile: ~finalizeNamespace C:\Users\vladv\destinyjs\node_modules\esm\esm.js:1:264716
-      1    0.0%    0.2%  LazyCompile: ~fields.map.fieldName C:\Users\vladv\destinyjs\schema.js:309:25
-      1    0.0%    0.2%  LazyCompile: ~exports.decode C:\Users\vladv\destinyjs\node_modules\mysql2\lib\parsers\string.js:5:26
-      1    0.0%    0.2%  LazyCompile: ~executeStart C:\Users\vladv\destinyjs\node_modules\mysql2\lib\packet_parser.js:63:15
-      1    0.0%    0.2%  LazyCompile: ~execute C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\command.js:22:10
-      1    0.0%    0.2%  LazyCompile: ~escape C:\Users\vladv\destinyjs\schema.js:10:16
-      1    0.0%    0.2%  LazyCompile: ~eofStatusFlags C:\Users\vladv\destinyjs\node_modules\mysql2\lib\packets\packet.js:175:17
-      1    0.0%    0.2%  LazyCompile: ~done C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\query.js:59:7
-      1    0.0%    0.2%  LazyCompile: ~debugs.(anonymous function) util.js:245:29
-      1    0.0%    0.2%  LazyCompile: ~createQuery C:\Users\vladv\destinyjs\node_modules\mysql2\lib\connection.js:842:21
-      1    0.0%    0.2%  LazyCompile: ~createPool buffer.js:99:20
-      1    0.0%    0.2%  LazyCompile: ~checkInt buffer.js:1183:18
-      1    0.0%    0.2%  LazyCompile: ~allocate buffer.js:281:18
-      1    0.0%    0.2%  LazyCompile: ~aB native array.js:531:12
-      1    0.0%    0.2%  LazyCompile: ~_unrefTimer net.js:275:52
-      1    0.0%    0.2%  LazyCompile: ~_tickDomainCallback internal/process/next_tick.js:194:31
-      1    0.0%    0.2%  LazyCompile: ~Writable.write _stream_writable.js:264:36
-      1    0.0%    0.2%  LazyCompile: ~UseSparseVariant native array.js:61:26
-      1    0.0%    0.2%  LazyCompile: ~TickObject internal/process/next_tick.js:235:16
-      1    0.0%    0.2%  LazyCompile: ~Stream internal/streams/legacy.js:6:16
-      1    0.0%    0.2%  LazyCompile: ~Socket.write net.js:706:34
-      1    0.0%    0.2%  LazyCompile: ~ResultSetHeader C:\Users\vladv\destinyjs\node_modules\mysql2\lib\packets\resultset_header.js:13:14
-      1    0.0%    0.2%  LazyCompile: ~Readable.read _stream_readable.js:365:35
-      1    0.0%    0.2%  LazyCompile: ~Promise C:\Users\vladv\destinyjs\node_modules\mysql2\promise.js:93:29
-      1    0.0%    0.2%  LazyCompile: ~Object.keys.map C:\Users\vladv\destinyjs\schema.js:231:54
-      1    0.0%    0.2%  LazyCompile: ~LRUCache.get C:\Users\vladv\destinyjs\node_modules\lru-cache\index.js:356:35
-      1    0.0%    0.2%  LazyCompile: ~InsertionSort native array.js:542:23
-      1    0.0%    0.2%  LazyCompile: ~EventEmitter events.js:27:22
-      1    0.0%    0.2%  LazyCompile: ~ConvertToString native array.js:132:25
-      1    0.0%    0.2%  LazyCompile: ~Command C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\command.js:6:14
-      1    0.0%    0.2%  LazyCompile: ~Buffer.write buffer.js:855:34
-      1    0.0%    0.2%  LazyCompile: ~Buffer.allocUnsafe buffer.js:252:30
-      1    0.0%    0.2%  LazyCompile: ~<anonymous> C:\Users\vladv\destinyjs\node_modules\mysql2\promise.js:7:18
-      1    0.0%    0.2%  LazyCompile: ~<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:69:54
-      1    0.0%    0.2%  LazyCompile: ~<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:16:42
-      1    0.0%    0.2%  LazyCompile: ~<anonymous> C:\Users\vladv\destinyjs\node_modules\esm\esm.js:1:33886
-      1    0.0%    0.2%  LazyCompile: ~<anonymous> C:\Users\vladv\destinyjs\node_modules\esm\esm.js:1:237813
-      1    0.0%    0.2%  LazyCompile: ~<anonymous> C:\Users\vladv\destinyjs\node_modules\esm\esm.js:1:215417
-      1    0.0%    0.2%  LazyCompile: *row C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\query.js:219:6
-      1    0.0%    0.2%  LazyCompile: *readLengthCodedString C:\Users\vladv\destinyjs\node_modules\mysql2\lib\packets\packet.js:354:24
-      1    0.0%    0.2%  LazyCompile: *parseDateTime C:\Users\vladv\destinyjs\node_modules\mysql2\lib\packets\packet.js:596:16
-      1    0.0%    0.2%  LazyCompile: *executeStart C:\Users\vladv\destinyjs\node_modules\mysql2\lib\packet_parser.js:63:15
-      1    0.0%    0.2%  LazyCompile: *execute C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\command.js:22:10
-      1    0.0%    0.2%  LazyCompile: *StackPush native array.js:79:19
-      1    0.0%    0.2%  LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:16:42
-      1    0.0%    0.2%  Handler: An IC handler from the snapshot
-      1    0.0%    0.2%  Builtin: TypedArrayConstructByArrayBuffer
-      1    0.0%    0.2%  Builtin: ToNumber
-      1    0.0%    0.2%  Builtin: StringPrototypeSubstring
-      1    0.0%    0.2%  Builtin: StringPrototypeReplace
-      1    0.0%    0.2%  Builtin: StringEqual
-      1    0.0%    0.2%  Builtin: StrictEqual
-      1    0.0%    0.2%  Builtin: ResumeGeneratorTrampoline
-      1    0.0%    0.2%  Builtin: ResolveNativePromise
-      1    0.0%    0.2%  Builtin: RegExpReplace
-      1    0.0%    0.2%  Builtin: ProxyGetProperty
-      1    0.0%    0.2%  Builtin: PromiseConstructor
-      1    0.0%    0.2%  Builtin: ObjectKeys
-      1    0.0%    0.2%  Builtin: NumberConstructor
-      1    0.0%    0.2%  Builtin: MapLookupHashIndex
-      1    0.0%    0.2%  Builtin: LoadICProtoArray
-      1    0.0%    0.2%  Builtin: KeyedStoreIC_Megamorphic_Strict
-      1    0.0%    0.2%  Builtin: JSBuiltinsConstructStub
-      1    0.0%    0.2%  Builtin: InterpreterPushArgsThenConstruct
-      1    0.0%    0.2%  Builtin: FastNewObject
-      1    0.0%    0.2%  Builtin: FastArrayShift
-      1    0.0%    0.2%  Builtin: ConstructFunction
-      1    0.0%    0.2%  Builtin: ClassOf
-      1    0.0%    0.2%  Builtin: CallFunction_ReceiverIsNotNullOrUndefined
-      1    0.0%    0.2%  Builtin: AsyncFunctionAwaitUncaught
-      1    0.0%    0.2%  Builtin: ArrayIteratorPrototypeNext
-      1    0.0%    0.2%  Builtin: ArrayForEach
-      1    0.0%    0.2%  Builtin: AdaptorWithBuiltinExitFrame
+    297    3.2%   10.3%  Builtin: KeyedLoadIC_Megamorphic
+    255    2.7%    8.8%  Stub: StringAddStub
+    148    1.6%    5.1%  LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+    121    1.3%    4.2%  KeyedLoadIC: A keyed load IC from the snapshot {1}
+    117    1.2%    4.0%  Stub: GetPropertyStub
+     93    1.0%    3.2%  Builtin: KeyedStoreIC_Megamorphic
+     72    0.8%    2.5%  LazyCompile: *makeLoadDocument C:\Users\vladv\destinyjs\schema.js:330:26
+     71    0.8%    2.5%  LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:73:31
+     69    0.7%    2.4%  Stub: CEntryStub
+     66    0.7%    2.3%  Builtin: ArrayMap
+     62    0.7%    2.1%  RegExp: [`\\\\]
+     58    0.6%    2.0%  Builtin: StringIndexOf
+     58    0.6%    2.0%  Builtin: FastNewClosure
+     55    0.6%    1.9%  KeyedLoadIC: A keyed load IC from the snapshot
+     51    0.5%    1.8%  Builtin: RegExpReplace
+     51    0.5%    1.8%  Builtin: ObjectKeys
+     50    0.5%    1.7%  Builtin: RegExpPrototypeMatch
+     49    0.5%    1.7%  Builtin: ObjectPrototypeToString
+     48    0.5%    1.7%  LoadIC: A load IC from the snapshot
+     47    0.5%    1.6%  Builtin: StringPrototypeReplace
+     47    0.5%    1.6%  Builtin: ArgumentsAdaptorTrampoline
+     41    0.4%    1.4%  Builtin: ToString
+     39    0.4%    1.3%  LazyCompile: *vivificateJsonBySchema C:\Users\vladv\destinyjs\schema.js:365:32
+     35    0.4%    1.2%  RegExp: ["\\\\]
+     35    0.4%    1.2%  Builtin: InterpreterEntryTrampoline
+     32    0.3%    1.1%  RegExp: \\.(\\d+)($|\\.)
+     31    0.3%    1.1%  Builtin: CallFunction_ReceiverIsAny
+     28    0.3%    1.0%  LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:16:42
+     26    0.3%    0.9%  Builtin: StringPrototypeSubstring
+     25    0.3%    0.9%  LazyCompile: *DoJoin native array.js:94:16
+     25    0.3%    0.9%  KeyedStoreIC: A keyed store IC from the snapshot
+     24    0.3%    0.8%  LazyCompile: *InsertionSort native array.js:542:23
+     24    0.3%    0.8%  Builtin: FastArrayShift
+     22    0.2%    0.8%  LazyCompile: *Join native array.js:119:14
+     21    0.2%    0.7%  Builtin: ArrayForEach
+     20    0.2%    0.7%  RegExp: \\[\\d+\\]
+     20    0.2%    0.7%  LazyCompile: *Object.keys.map C:\Users\vladv\destinyjs\schema.js:231:54
+     19    0.2%    0.7%  Builtin: CompileLazy
+     16    0.2%    0.6%  Stub: JSEntryStub
+     16    0.2%    0.6%  RegExp: \\[(\\d+)\\]
+     16    0.2%    0.6%  Builtin: StringConstructor
+     16    0.2%    0.6%  Builtin: MapLookupHashIndex
+     15    0.2%    0.5%  LazyCompile: *getkey C:\Users\vladv\destinyjs\node_modules\flat\index.js:58:19
+     14    0.1%    0.5%  Builtin: ToNumber
+     14    0.1%    0.5%  Builtin: StringPrototypeSplit
+     13    0.1%    0.4%  LazyCompile: ~UseSparseVariant native array.js:61:26
+     13    0.1%    0.4%  LazyCompile: *QuickSort native array.js:573:19
+     13    0.1%    0.4%  Builtin: StringPrototypeSubstr
+     12    0.1%    0.4%  Builtin: CallFunction_ReceiverIsNullOrUndefined
+     10    0.1%    0.3%  RegExp: \\[(\\d+)\\] {1}
+     10    0.1%    0.3%  Builtin: StringLessThan
+     10    0.1%    0.3%  Builtin: Call_ReceiverIsNullOrUndefined
+      9    0.1%    0.3%  LazyCompile: ~ConvertToString native array.js:132:25
+      9    0.1%    0.3%  LazyCompile: *sql.map.key C:\Users\vladv\destinyjs\schema.js:303:9
+      9    0.1%    0.3%  LazyCompile: *fields.map.fieldName C:\Users\vladv\destinyjs\schema.js:309:25
+      8    0.1%    0.3%  Builtin: LoadICProtoArray
+      7    0.1%    0.2%  Stub: RecordWriteStub
+      7    0.1%    0.2%  Stub: CEntryStub {1}
+      7    0.1%    0.2%  LazyCompile: ~match native string.js:12:6
+      7    0.1%    0.2%  Builtin: SetAdd
+      7    0.1%    0.2%  Builtin: RegExpPrototypeReplace
+      6    0.1%    0.2%  Stub: StringAddStub {1}
+      6    0.1%    0.2%  LazyCompile: *StackPop native array.js:82:18
+      6    0.1%    0.2%  LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:69:54
+      6    0.1%    0.2%  Builtin: Call_ReceiverIsAny
+      5    0.1%    0.2%  LazyCompile: *join native array.js:287:46
+      5    0.1%    0.2%  LazyCompile: *StackPush native array.js:79:19
+      5    0.1%    0.2%  Builtin: StringEqual
+      5    0.1%    0.2%  Builtin: JSEntryTrampoline
+      4    0.0%    0.1%  LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+      4    0.0%    0.1%  LazyCompile: *toString native array.js:248:50
+      4    0.0%    0.1%  LazyCompile: *UseSparseVariant native array.js:61:26
+      4    0.0%    0.1%  LazyCompile: *ConvertToString native array.js:132:25
+      4    0.0%    0.1%  KeyedStoreIC: A keyed store IC from the snapshot {1}
+      4    0.0%    0.1%  Handler: prototype {1}
+      4    0.0%    0.1%  Builtin: StringPrototypeToString
+      4    0.0%    0.1%  Builtin: OrdinaryToPrimitive_Number
+      4    0.0%    0.1%  Builtin: CallFunction_ReceiverIsNotNullOrUndefined
+      3    0.0%    0.1%  Stub: RecordWriteStub {5}
+      3    0.0%    0.1%  Stub: RecordWriteStub {1}
+      3    0.0%    0.1%  Stub: InternalArrayConstructorStub
+      3    0.0%    0.1%  LazyCompile: *InnerArrayJoin native array.js:274:24
+      3    0.0%    0.1%  Builtin: NonPrimitiveToPrimitive_Number
+      3    0.0%    0.1%  Builtin: LessThan
+      3    0.0%    0.1%  Builtin: Add {1}
+      2    0.0%    0.1%  Stub: RecordWriteStub {4}
+      2    0.0%    0.1%  Stub: InternalArraySingleArgumentConstructorStub
+      2    0.0%    0.1%  LazyCompile: ~step C:\Users\vladv\destinyjs\node_modules\flat\index.js:14:17
+      2    0.0%    0.1%  LazyCompile: ~makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+      2    0.0%    0.1%  LazyCompile: ~makeLoadDocument C:\Users\vladv\destinyjs\schema.js:330:26
+      2    0.0%    0.1%  LazyCompile: *normalizeStringWin32 path.js:33:30
+      2    0.0%    0.1%  LazyCompile: *getTablesBySchema C:\Users\vladv\destinyjs\schema.js:164:27
+      2    0.0%    0.1%  LazyCompile: *StackHas native array.js:85:18
+      2    0.0%    0.1%  Builtin: StringToNumber
+      2    0.0%    0.1%  Builtin: StringPrototypeValueOf
+      2    0.0%    0.1%  Builtin: SetConstructor
+      2    0.0%    0.1%  Builtin: NumberConstructor
+      2    0.0%    0.1%  Builtin: JSBuiltinsConstructStub
+      1    0.0%    0.0%  Stub: RecordWriteStub {9}
+      1    0.0%    0.0%  Stub: RecordWriteStub {8}
+      1    0.0%    0.0%  Stub: RecordWriteStub {7}
+      1    0.0%    0.0%  Stub: RecordWriteStub {6}
+      1    0.0%    0.0%  Stub: RecordWriteStub {3}
+      1    0.0%    0.0%  Stub: RecordWriteStub {2}
+      1    0.0%    0.0%  LazyCompile: ~args internal/util/types.js:11:10
+      1    0.0%    0.0%  LazyCompile: ~Object.keys.map C:\Users\vladv\destinyjs\schema.js:231:54
+      1    0.0%    0.0%  LazyCompile: ~<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:73:31
+      1    0.0%    0.0%  LazyCompile: *validateAndFlattenSchema C:\Users\vladv\destinyjs\schema.js:20:34
+      1    0.0%    0.0%  LazyCompile: *step C:\Users\vladv\destinyjs\node_modules\flat\index.js:14:17
+      1    0.0%    0.0%  LazyCompile: *main C:\Users\vladv\destinyjs\schema_run.js:15:14
+      1    0.0%    0.0%  Handler: prototype {2}
+      1    0.0%    0.0%  Builtin: ToObject
+      1    0.0%    0.0%  Builtin: StringConstructor_ConstructStub
+      1    0.0%    0.0%  Builtin: InterpreterPushUndefinedAndArgsThenCall
+      1    0.0%    0.0%  Builtin: Call_ReceiverIsNotNullOrUndefined
 
  [C++]:
    ticks  total  nonlib   name
 
  [Summary]:
    ticks  total  nonlib   name
-    452    2.7%   93.4%  JavaScript
+   2754   29.3%   95.1%  JavaScript
       0    0.0%    0.0%  C++
-     19    0.1%    3.9%  GC
-  16561   97.2%          Shared libraries
-     32    0.2%          Unaccounted
+    231    2.5%    8.0%  GC
+   6520   69.3%          Shared libraries
+    141    1.5%          Unaccounted
 
  [C++ entry points]:
    ticks    cpp   total   name
@@ -206,188 +147,382 @@ Statistical profiling result from isolate-00000185835123C0-v8.log, (17045 ticks,
   Callers occupying less than 1.0% are not shown.
 
    ticks parent  name
-  15756   92.4%  C:\WINDOWS\SYSTEM32\ntdll.dll
+   5576   59.2%  C:\Program Files\nodejs\node.exe
+   5321   95.4%    C:\Program Files\nodejs\node.exe
+   1701   32.0%      Builtin: StringPrototypeReplace
+    544   32.0%        LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+    299   55.0%          LazyCompile: *main C:\Users\vladv\destinyjs\schema_run.js:15:14
+    299  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
+    245   45.0%          LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+    245  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
+    400   23.5%        LazyCompile: *makeLoadDocument C:\Users\vladv\destinyjs\schema.js:330:26
+    276   69.0%          LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:73:31
+    276  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
+    124   31.0%          LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+    124  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
+    264   15.5%        LazyCompile: *Object.keys.map C:\Users\vladv\destinyjs\schema.js:231:54
+    264  100.0%          Builtin: ArrayMap
+    264  100.0%            LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+    225   13.2%        LazyCompile: *vivificateJsonBySchema C:\Users\vladv\destinyjs\schema.js:365:32
+    157   69.8%          LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:73:31
+    157  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
+     68   30.2%          LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+     68  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
+    207   12.2%        LazyCompile: *sql.map.key C:\Users\vladv\destinyjs\schema.js:303:9
+    207  100.0%          Builtin: ArrayMap
+    207  100.0%            LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+     52    3.1%        LazyCompile: *fields.map.fieldName C:\Users\vladv\destinyjs\schema.js:309:25
+     52  100.0%          Builtin: ArrayMap
+     52  100.0%            LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+   1115   21.0%      LazyCompile: *vivificateJsonBySchema C:\Users\vladv\destinyjs\schema.js:365:32
+    752   67.4%        LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:73:31
+    752  100.0%          Builtin: AsyncFunctionAwaitResolveClosure
+    752  100.0%            Builtin: PromiseHandle
+    363   32.6%        LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+    363  100.0%          Builtin: AsyncFunctionAwaitResolveClosure
+    363  100.0%            Builtin: PromiseHandle
+    653   12.3%      LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+    327   50.1%        LazyCompile: *main C:\Users\vladv\destinyjs\schema_run.js:15:14
+    327  100.0%          Builtin: AsyncFunctionAwaitResolveClosure
+    327  100.0%            Builtin: PromiseHandle
+    326   49.9%        LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+    326  100.0%          Builtin: AsyncFunctionAwaitResolveClosure
+    326  100.0%            Builtin: PromiseHandle
+    424    8.0%      LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:16:42
+    424  100.0%        Builtin: ArrayForEach
+    420   99.1%          LazyCompile: *step C:\Users\vladv\destinyjs\node_modules\flat\index.js:14:17
+    420  100.0%            LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:16:42
+    315    5.9%      LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:73:31
+    315  100.0%        Builtin: ArrayForEach
+    315  100.0%          LazyCompile: *vivificateJsonBySchema C:\Users\vladv\destinyjs\schema.js:365:32
+    229   72.7%            LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:73:31
+     86   27.3%            LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+    265    5.0%      Builtin: RegExpPrototypeReplace
+    265  100.0%        Builtin: StringPrototypeReplace
+    264   99.6%          LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+    147   55.7%            LazyCompile: *main C:\Users\vladv\destinyjs\schema_run.js:15:14
+    117   44.3%            LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+    128    2.4%      Builtin: RegExpPrototypeMatch
+     89   69.5%        LazyCompile: *Object.keys.map C:\Users\vladv\destinyjs\schema.js:231:54
+     89  100.0%          Builtin: ArrayMap
+     89  100.0%            LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+     39   30.5%        LazyCompile: ~match native string.js:12:6
+     38   97.4%          LazyCompile: *Object.keys.map C:\Users\vladv\destinyjs\schema.js:231:54
+     38  100.0%            Builtin: ArrayMap
+      1    2.6%          LazyCompile: ~Object.keys.map C:\Users\vladv\destinyjs\schema.js:231:54
+      1  100.0%            Builtin: ArrayMap
+    114    2.1%      Builtin: ObjectKeys
+     55   48.2%        LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+     30   54.5%          LazyCompile: *main C:\Users\vladv\destinyjs\schema_run.js:15:14
+     30  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
+     25   45.5%          LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+     25  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
+     41   36.0%        LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:16:42
+     41  100.0%          Builtin: ArrayForEach
+     41  100.0%            LazyCompile: *step C:\Users\vladv\destinyjs\node_modules\flat\index.js:14:17
+     18   15.8%        LazyCompile: *step C:\Users\vladv\destinyjs\node_modules\flat\index.js:14:17
+     18  100.0%          LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:16:42
+     18  100.0%            Builtin: ArrayForEach
+     87    1.6%      Builtin: StringPrototypeSubstring
+     87  100.0%        LazyCompile: *makeLoadDocument C:\Users\vladv\destinyjs\schema.js:330:26
+     61   70.1%          LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:73:31
+     61  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
+     26   29.9%          LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+     26  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
+     85    1.6%      LazyCompile: *fields.map.fieldName C:\Users\vladv\destinyjs\schema.js:309:25
+     85  100.0%        Builtin: ArrayMap
+     85  100.0%          LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+     45   52.9%            LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+     40   47.1%            LazyCompile: *main C:\Users\vladv\destinyjs\schema_run.js:15:14
+     83    1.6%      Builtin: StringPrototypeSplit
+     83  100.0%        LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:73:31
+     83  100.0%          Builtin: ArrayForEach
+     83  100.0%            LazyCompile: *vivificateJsonBySchema C:\Users\vladv\destinyjs\schema.js:365:32
+     74    1.4%      LazyCompile: *DoJoin native array.js:94:16
+     74  100.0%        LazyCompile: *Join native array.js:119:14
+     57   77.0%          LazyCompile: *InnerArrayJoin native array.js:274:24
+     57  100.0%            LazyCompile: *join native array.js:287:46
+     17   23.0%          LazyCompile: *toString native array.js:248:50
+     17  100.0%            Stub: CEntryStub
+     73    1.4%      Builtin: StringConstructor
+     73  100.0%        LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+     37   50.7%          LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+     37  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
+     36   49.3%          LazyCompile: *main C:\Users\vladv\destinyjs\schema_run.js:15:14
+     36  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
+     61    1.1%      Builtin: StringPrototypeSubstr
+     61  100.0%        LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+     32   52.5%          LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+     32  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
+     29   47.5%          LazyCompile: *main C:\Users\vladv\destinyjs\schema_run.js:15:14
+     29  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
 
-    769    4.5%  C:\Program Files\nodejs\node.exe
-    544   70.7%    C:\Program Files\nodejs\node.exe
-     47    8.6%      LazyCompile: ~createWriteReq net.js:790:24
-     47  100.0%        LazyCompile: ~Socket._writeGeneric net.js:715:42
-     45   95.7%          LazyCompile: ~Socket._write net.js:786:35
-     45  100.0%            LazyCompile: ~doWrite _stream_writable.js:388:17
-      2    4.3%          LazyCompile: *write C:\Users\vladv\destinyjs\node_modules\mysql2\lib\connection.js:220:8
-      2  100.0%            LazyCompile: ~writePacket C:\Users\vladv\destinyjs\node_modules\mysql2\lib\connection.js:249:14
-     46    8.5%      LazyCompile: *vivificateJsonBySchema C:\Users\vladv\destinyjs\schema.js:365:39
-     46  100.0%        LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
-     46  100.0%          Builtin: AsyncFunctionAwaitResolveClosure
-     46  100.0%            Builtin: PromiseHandle
-     42    7.7%      Builtin: StringPrototypeReplace
-     14   33.3%        LazyCompile: *makeLoadDocument C:\Users\vladv\destinyjs\schema.js:330:33
-     14  100.0%          LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
-     14  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
-      8   19.0%        LazyCompile: *vivificateJsonBySchema C:\Users\vladv\destinyjs\schema.js:365:39
-      8  100.0%          LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
-      8  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
-      8   19.0%        LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:33
-      8  100.0%          LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
-      8  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
-      5   11.9%        LazyCompile: *sql.map.key C:\Users\vladv\destinyjs\schema.js:303:9
-      5  100.0%          Builtin: ArrayMap
-      5  100.0%            LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:33
-      2    4.8%        LazyCompile: *fields.map.fieldName C:\Users\vladv\destinyjs\schema.js:309:25
-      2  100.0%          Builtin: ArrayMap
-      2  100.0%            LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:33
-      1    2.4%        LazyCompile: ~vivificateJsonBySchema C:\Users\vladv\destinyjs\schema.js:365:39
+    925    9.8%  C:\WINDOWS\SYSTEM32\ntdll.dll
+    774   83.7%    C:\Program Files\nodejs\node.exe
+    628   81.1%      Builtin: StringPrototypeReplace
+    187   29.8%        LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+    108   57.8%          LazyCompile: *main C:\Users\vladv\destinyjs\schema_run.js:15:14
+    108  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
+     79   42.2%          LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+     79  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
+    175   27.9%        LazyCompile: *makeLoadDocument C:\Users\vladv\destinyjs\schema.js:330:26
+    127   72.6%          LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:73:31
+    127  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
+     48   27.4%          LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+     48  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
+    120   19.1%        LazyCompile: *sql.map.key C:\Users\vladv\destinyjs\schema.js:303:9
+    120  100.0%          Builtin: ArrayMap
+    120  100.0%            LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+     64   10.2%        LazyCompile: *Object.keys.map C:\Users\vladv\destinyjs\schema.js:231:54
+     64  100.0%          Builtin: ArrayMap
+     64  100.0%            LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+     58    9.2%        LazyCompile: *vivificateJsonBySchema C:\Users\vladv\destinyjs\schema.js:365:32
+     45   77.6%          LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:73:31
+     45  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
+     13   22.4%          LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+     13  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
+     19    3.0%        LazyCompile: *fields.map.fieldName C:\Users\vladv\destinyjs\schema.js:309:25
+     19  100.0%          Builtin: ArrayMap
+     19  100.0%            LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+     85   11.0%      Builtin: RegExpPrototypeReplace
+     85  100.0%        Builtin: StringPrototypeReplace
+     84   98.8%          LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+     45   53.6%            LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+     39   46.4%            LazyCompile: *main C:\Users\vladv\destinyjs\schema_run.js:15:14
+      1    1.2%          LazyCompile: ~makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+      1  100.0%            LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+     53    6.8%      LazyCompile: *vivificateJsonBySchema C:\Users\vladv\destinyjs\schema.js:365:32
+     37   69.8%        LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:73:31
+     37  100.0%          Builtin: AsyncFunctionAwaitResolveClosure
+     37  100.0%            Builtin: PromiseHandle
+     16   30.2%        LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+     16  100.0%          Builtin: AsyncFunctionAwaitResolveClosure
+     16  100.0%            Builtin: PromiseHandle
+
+    297    3.2%  Builtin: KeyedLoadIC_Megamorphic
+     84   28.3%    LazyCompile: *vivificateJsonBySchema C:\Users\vladv\destinyjs\schema.js:365:32
+     59   70.2%      LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:73:31
+     59  100.0%        Builtin: AsyncFunctionAwaitResolveClosure
+     59  100.0%          Builtin: PromiseHandle
+     59  100.0%            C:\Program Files\nodejs\node.exe
+     25   29.8%      LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+     25  100.0%        Builtin: AsyncFunctionAwaitResolveClosure
+     25  100.0%          Builtin: PromiseHandle
+     25  100.0%            C:\Program Files\nodejs\node.exe
+     71   23.9%    LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+     41   57.7%      LazyCompile: *main C:\Users\vladv\destinyjs\schema_run.js:15:14
+     41  100.0%        Builtin: AsyncFunctionAwaitResolveClosure
+     41  100.0%          Builtin: PromiseHandle
+     41  100.0%            C:\Program Files\nodejs\node.exe
+     30   42.3%      LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+     30  100.0%        Builtin: AsyncFunctionAwaitResolveClosure
+     30  100.0%          Builtin: PromiseHandle
+     30  100.0%            C:\Program Files\nodejs\node.exe
+     67   22.6%    LazyCompile: *makeLoadDocument C:\Users\vladv\destinyjs\schema.js:330:26
+     43   64.2%      LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:73:31
+     43  100.0%        Builtin: AsyncFunctionAwaitResolveClosure
+     43  100.0%          Builtin: PromiseHandle
+     43  100.0%            C:\Program Files\nodejs\node.exe
+     24   35.8%      LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+     24  100.0%        Builtin: AsyncFunctionAwaitResolveClosure
+     24  100.0%          Builtin: PromiseHandle
+     24  100.0%            C:\Program Files\nodejs\node.exe
+     52   17.5%    LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:73:31
+     50   96.2%      Builtin: ArrayForEach
+     50  100.0%        LazyCompile: *vivificateJsonBySchema C:\Users\vladv\destinyjs\schema.js:365:32
+     37   74.0%          LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:73:31
+     37  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
+     13   26.0%          LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+     13  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
+      2    3.8%      Builtin: AsyncFunctionAwaitResolveClosure
+      2  100.0%        Builtin: PromiseHandle
+      2  100.0%          C:\Program Files\nodejs\node.exe
+      2  100.0%            LazyCompile: ~_tickCallback internal/process/next_tick.js:152:25
+     12    4.0%    LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:16:42
+     12  100.0%      Builtin: ArrayForEach
+     12  100.0%        LazyCompile: *step C:\Users\vladv\destinyjs\node_modules\flat\index.js:14:17
+      9   75.0%          LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:16:42
+      9  100.0%            Builtin: ArrayForEach
+      3   25.0%          LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+      2   66.7%            LazyCompile: *main C:\Users\vladv\destinyjs\schema_run.js:15:14
+      1   33.3%            LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+      9    3.0%    LazyCompile: *fields.map.fieldName C:\Users\vladv\destinyjs\schema.js:309:25
+      9  100.0%      Builtin: ArrayMap
+      9  100.0%        LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+      6   66.7%          LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+      6  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
+      3   33.3%          LazyCompile: *main C:\Users\vladv\destinyjs\schema_run.js:15:14
+      3  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
+
+    255    2.7%  Stub: StringAddStub
+     80   31.4%    LazyCompile: *makeLoadDocument C:\Users\vladv\destinyjs\schema.js:330:26
+     55   68.8%      LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:73:31
+     55  100.0%        Builtin: AsyncFunctionAwaitResolveClosure
+     55  100.0%          Builtin: PromiseHandle
+     55  100.0%            C:\Program Files\nodejs\node.exe
+     25   31.3%      LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+     25  100.0%        Builtin: AsyncFunctionAwaitResolveClosure
+     25  100.0%          Builtin: PromiseHandle
+     25  100.0%            C:\Program Files\nodejs\node.exe
+     76   29.8%    LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+     41   53.9%      LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+     41  100.0%        Builtin: AsyncFunctionAwaitResolveClosure
+     41  100.0%          Builtin: PromiseHandle
+     41  100.0%            C:\Program Files\nodejs\node.exe
+     35   46.1%      LazyCompile: *main C:\Users\vladv\destinyjs\schema_run.js:15:14
+     35  100.0%        Builtin: AsyncFunctionAwaitResolveClosure
+     35  100.0%          Builtin: PromiseHandle
+     35  100.0%            C:\Program Files\nodejs\node.exe
+     41   16.1%    LazyCompile: *vivificateJsonBySchema C:\Users\vladv\destinyjs\schema.js:365:32
+     32   78.0%      LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:73:31
+     32  100.0%        Builtin: AsyncFunctionAwaitResolveClosure
+     32  100.0%          Builtin: PromiseHandle
+     32  100.0%            C:\Program Files\nodejs\node.exe
+      9   22.0%      LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+      9  100.0%        Builtin: AsyncFunctionAwaitResolveClosure
+      9  100.0%          Builtin: PromiseHandle
+      9  100.0%            C:\Program Files\nodejs\node.exe
+     34   13.3%    LazyCompile: *sql.map.key C:\Users\vladv\destinyjs\schema.js:303:9
+     34  100.0%      Builtin: ArrayMap
+     34  100.0%        LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+     22   64.7%          LazyCompile: *main C:\Users\vladv\destinyjs\schema_run.js:15:14
+     22  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
+     12   35.3%          LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+     12  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
+     17    6.7%    LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:16:42
+     17  100.0%      Builtin: ArrayForEach
+     17  100.0%        LazyCompile: *step C:\Users\vladv\destinyjs\node_modules\flat\index.js:14:17
+     17  100.0%          LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:16:42
+     17  100.0%            Builtin: ArrayForEach
+      4    1.6%    LazyCompile: *fields.map.fieldName C:\Users\vladv\destinyjs\schema.js:309:25
+      4  100.0%      Builtin: ArrayMap
+      4  100.0%        LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+      3   75.0%          LazyCompile: *main C:\Users\vladv\destinyjs\schema_run.js:15:14
+      3  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
+      1   25.0%          LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+      1  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
+
+    148    1.6%  LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+     76   51.4%    LazyCompile: *main C:\Users\vladv\destinyjs\schema_run.js:15:14
+     76  100.0%      Builtin: AsyncFunctionAwaitResolveClosure
+     76  100.0%        Builtin: PromiseHandle
+     76  100.0%          C:\Program Files\nodejs\node.exe
+     76  100.0%            LazyCompile: ~_tickCallback internal/process/next_tick.js:152:25
+     72   48.6%    LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+     72  100.0%      Builtin: AsyncFunctionAwaitResolveClosure
+     72  100.0%        Builtin: PromiseHandle
+     72  100.0%          C:\Program Files\nodejs\node.exe
+     72  100.0%            LazyCompile: ~_tickCallback internal/process/next_tick.js:152:25
+
+    141    1.5%  UNKNOWN
+
+    121    1.3%  KeyedLoadIC: A keyed load IC from the snapshot {1}
+     40   33.1%    LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+     22   55.0%      LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+     22  100.0%        Builtin: AsyncFunctionAwaitResolveClosure
+     22  100.0%          Builtin: PromiseHandle
+     22  100.0%            C:\Program Files\nodejs\node.exe
+     18   45.0%      LazyCompile: *main C:\Users\vladv\destinyjs\schema_run.js:15:14
+     18  100.0%        Builtin: AsyncFunctionAwaitResolveClosure
+     18  100.0%          Builtin: PromiseHandle
+     18  100.0%            C:\Program Files\nodejs\node.exe
+     32   26.4%    LazyCompile: *vivificateJsonBySchema C:\Users\vladv\destinyjs\schema.js:365:32
+     22   68.8%      LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:73:31
+     22  100.0%        Builtin: AsyncFunctionAwaitResolveClosure
+     22  100.0%          Builtin: PromiseHandle
+     22  100.0%            C:\Program Files\nodejs\node.exe
+     10   31.3%      LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+     10  100.0%        Builtin: AsyncFunctionAwaitResolveClosure
+     10  100.0%          Builtin: PromiseHandle
+     10  100.0%            C:\Program Files\nodejs\node.exe
+     18   14.9%    LazyCompile: *makeLoadDocument C:\Users\vladv\destinyjs\schema.js:330:26
+     13   72.2%      LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:73:31
+     13  100.0%        Builtin: AsyncFunctionAwaitResolveClosure
+     13  100.0%          Builtin: PromiseHandle
+     13  100.0%            C:\Program Files\nodejs\node.exe
+      5   27.8%      LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+      5  100.0%        Builtin: AsyncFunctionAwaitResolveClosure
+      5  100.0%          Builtin: PromiseHandle
+      5  100.0%            C:\Program Files\nodejs\node.exe
+     16   13.2%    LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:73:31
+     16  100.0%      Builtin: ArrayForEach
+     16  100.0%        LazyCompile: *vivificateJsonBySchema C:\Users\vladv\destinyjs\schema.js:365:32
+     12   75.0%          LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:73:31
+     12  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
+      4   25.0%          LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+      4  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
+      5    4.1%    LazyCompile: *fields.map.fieldName C:\Users\vladv\destinyjs\schema.js:309:25
+      5  100.0%      Builtin: ArrayMap
+      5  100.0%        LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+      4   80.0%          LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+      4  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
+      1   20.0%          LazyCompile: *main C:\Users\vladv\destinyjs\schema_run.js:15:14
+      1  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
+      3    2.5%    LazyCompile: ~match native string.js:12:6
+      3  100.0%      LazyCompile: *Object.keys.map C:\Users\vladv\destinyjs\schema.js:231:54
+      3  100.0%        Builtin: ArrayMap
+      3  100.0%          LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+      3  100.0%            LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+      3    2.5%    LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:16:42
+      3  100.0%      Builtin: ArrayForEach
+      3  100.0%        LazyCompile: *step C:\Users\vladv\destinyjs\node_modules\flat\index.js:14:17
+      3  100.0%          LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:16:42
+      3  100.0%            Builtin: ArrayForEach
+      2    1.7%    Builtin: ArrayForEach
+      2  100.0%      LazyCompile: *vivificateJsonBySchema C:\Users\vladv\destinyjs\schema.js:365:32
+      2  100.0%        LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:73:31
+      2  100.0%          Builtin: AsyncFunctionAwaitResolveClosure
+      2  100.0%            Builtin: PromiseHandle
+
+    117    1.2%  Stub: GetPropertyStub
+     63   53.8%    LazyCompile: *InsertionSort native array.js:542:23
+     63  100.0%      LazyCompile: *QuickSort native array.js:573:19
+     43   68.3%        LazyCompile: *sort native array.js:748:46
+     43  100.0%          LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+     27   62.8%            LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+     16   37.2%            LazyCompile: *main C:\Users\vladv\destinyjs\schema_run.js:15:14
+     15   23.8%        LazyCompile: *QuickSort native array.js:573:19
+     13   86.7%          LazyCompile: *sort native array.js:748:46
+     13  100.0%            LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+      1    6.7%          LazyCompile: ~sort native array.js:748:46
+      1  100.0%            LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+      1    6.7%          LazyCompile: ~InnerArraySort native array.js:529:24
+      1  100.0%            LazyCompile: ~sort native array.js:748:46
+      4    6.3%        LazyCompile: ~sort native array.js:748:46
+      4  100.0%          LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+      4  100.0%            LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+      1    1.6%        LazyCompile: ~InnerArraySort native array.js:529:24
+      1  100.0%          LazyCompile: ~sort native array.js:748:46
+      1  100.0%            LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+     33   28.2%    LazyCompile: *QuickSort native array.js:573:19
+     32   97.0%      LazyCompile: *sort native array.js:748:46
+     32  100.0%        LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+     21   65.6%          LazyCompile: *main C:\Users\vladv\destinyjs\schema_run.js:15:14
+     21  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
+     11   34.4%          LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+     11  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
+      1    3.0%      LazyCompile: ~sort native array.js:748:46
+      1  100.0%        LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
       1  100.0%          LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
       1  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
-      1    2.4%        LazyCompile: ~module.exports.ae.parseRange C:\Users\vladv\destinyjs\node_modules\esm\esm.js:1:12300
-      1  100.0%          LazyCompile: ~<anonymous> C:\Users\vladv\destinyjs\node_modules\esm\esm.js:1:9151
-      1  100.0%            Builtin: ArrayMap
-      1    2.4%        LazyCompile: ~escapeId C:\Users\vladv\destinyjs\schema.js:9:18
-      1  100.0%          LazyCompile: ~sql.map.key C:\Users\vladv\destinyjs\schema.js:303:9
-      1  100.0%            Builtin: ArrayMap
-      1    2.4%        LazyCompile: ~escape C:\Users\vladv\destinyjs\schema.js:10:16
-      1  100.0%          LazyCompile: ~makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:33
-      1  100.0%            LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
-      1    2.4%        LazyCompile: *Object.keys.map C:\Users\vladv\destinyjs\schema.js:231:54
-      1  100.0%          Builtin: ArrayMap
-      1  100.0%            LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:33
-     31    5.7%      LazyCompile: *get C:\Users\vladv\destinyjs\node_modules\esm\esm.js:1:209057
-     21   67.7%        LazyCompile: *resultsetHeader C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\query.js:103:18
-     21  100.0%          LazyCompile: *execute C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\command.js:22:10
-     21  100.0%            LazyCompile: ~handlePacket C:\Users\vladv\destinyjs\node_modules\mysql2\lib\connection.js:388:15
-      4   12.9%        LazyCompile: ~doneInsert C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\query.js:83:13
-      4  100.0%          LazyCompile: ~resultsetHeader C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\query.js:103:18
-      3   75.0%            LazyCompile: *execute C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\command.js:22:10
-      1   25.0%            LazyCompile: ~execute C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\command.js:22:10
-      2    6.5%        LazyCompile: ~EventEmitter.init events.js:62:29
-      2  100.0%          LazyCompile: ~EventEmitter events.js:27:22
-      1   50.0%            LazyCompile: ~Command C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\command.js:6:14
-      1   50.0%            LazyCompile: *Query C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\query.js:17:14
-      2    6.5%        LazyCompile: *readField C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\query.js:180:12
-      2  100.0%          LazyCompile: *execute C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\command.js:22:10
-      2  100.0%            LazyCompile: ~handlePacket C:\Users\vladv\destinyjs\node_modules\mysql2\lib\connection.js:388:15
-      2    6.5%        LazyCompile: *execute C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\command.js:22:10
-      2  100.0%          LazyCompile: ~handlePacket C:\Users\vladv\destinyjs\node_modules\mysql2\lib\connection.js:388:15
-      2  100.0%            LazyCompile: *Connection.stream.on.data C:\Users\vladv\destinyjs\node_modules\mysql2\lib\connection.js:74:28
-     25    4.6%      LazyCompile: ~start C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\query.js:44:8
-     21   84.0%        LazyCompile: *execute C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\command.js:22:10
-     21  100.0%          LazyCompile: ~handlePacket C:\Users\vladv\destinyjs\node_modules\mysql2\lib\connection.js:388:15
-     19   90.5%            LazyCompile: ~addCommand C:\Users\vladv\destinyjs\node_modules\mysql2\lib\connection.js:460:13
-      2    9.5%            LazyCompile: *Promise C:\Users\vladv\destinyjs\node_modules\mysql2\promise.js:93:29
-      4   16.0%        LazyCompile: ~execute C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\command.js:22:10
-      4  100.0%          LazyCompile: ~handlePacket C:\Users\vladv\destinyjs\node_modules\mysql2\lib\connection.js:388:15
-      4  100.0%            LazyCompile: ~addCommand C:\Users\vladv\destinyjs\node_modules\mysql2\lib\connection.js:460:13
-     19    3.5%      LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:33
-     19  100.0%        LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
-     19  100.0%          Builtin: AsyncFunctionAwaitResolveClosure
-     19  100.0%            Builtin: PromiseHandle
-     17    3.1%      LazyCompile: ~stringSlice buffer.js:555:21
-      8   47.1%        LazyCompile: *readField C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\query.js:180:12
-      8  100.0%          LazyCompile: *execute C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\command.js:22:10
-      8  100.0%            LazyCompile: ~handlePacket C:\Users\vladv\destinyjs\node_modules\mysql2\lib\connection.js:388:15
-      5   29.4%        LazyCompile: *readLengthCodedString C:\Users\vladv\destinyjs\node_modules\mysql2\lib\packets\packet.js:354:24
-      3   60.0%          LazyCompile: *row C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\query.js:219:6
-      3  100.0%            LazyCompile: *execute C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\command.js:22:10
-      2   40.0%          LazyCompile: *TextRow :3:26
-      2  100.0%            LazyCompile: ~row C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\query.js:219:6
-      2   11.8%        LazyCompile: ~Buffer.toString buffer.js:609:37
-      2  100.0%          LazyCompile: ~fs.readFileSync fs.js:548:27
-      2  100.0%            LazyCompile: ~Module._extensions..js module.js:662:37
-      2   11.8%        LazyCompile: *exports.decode C:\Users\vladv\destinyjs\node_modules\mysql2\lib\parsers\string.js:5:26
-      2  100.0%          LazyCompile: *row C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\query.js:219:6
-      2  100.0%            LazyCompile: *execute C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\command.js:22:10
-     17    3.1%      LazyCompile: ~realpathSync fs.js:1579:40
-     17  100.0%        LazyCompile: ~s C:\Users\vladv\destinyjs\node_modules\esm\esm.js:1:216307
-     17  100.0%          LazyCompile: ~<anonymous> C:\Users\vladv\destinyjs\node_modules\esm\esm.js:1:216573
-     12   70.6%            LazyCompile: ~So C:\Users\vladv\destinyjs\node_modules\esm\esm.js:1:217556
-      5   29.4%            LazyCompile: ~bo C:\Users\vladv\destinyjs\node_modules\esm\esm.js:1:217193
-     16    2.9%      LazyCompile: ~runInThisContext bootstrap_node.js:512:28
-     16  100.0%        LazyCompile: ~NativeModule.compile bootstrap_node.js:601:44
-     16  100.0%          LazyCompile: ~NativeModule.require bootstrap_node.js:533:34
-      3   18.8%            Script: ~<anonymous> module.js:1:11
-      1    6.3%            Script: ~<anonymous> tty.js:1:11
-      1    6.3%            Script: ~<anonymous> tls.js:1:11
-      1    6.3%            Script: ~<anonymous> timers.js:1:11
-      1    6.3%            Script: ~<anonymous> stream.js:1:11
-      1    6.3%            Script: ~<anonymous> repl.js:1:11
-      1    6.3%            Script: ~<anonymous> internal/trace_events_async_hooks.js:1:11
-      1    6.3%            Script: ~<anonymous> internal/loader/ModuleRequest.js:1:11
-      1    6.3%            Script: ~<anonymous> fs.js:1:11
-      1    6.3%            LazyCompile: ~startup bootstrap_node.js:24:19
-      1    6.3%            LazyCompile: ~setup_performance internal/process.js:15:27
-      1    6.3%            LazyCompile: ~setupGlobalVariables bootstrap_node.js:268:32
-      1    6.3%            LazyCompile: ~setupGlobalConsole bootstrap_node.js:323:30
-      1    6.3%            LazyCompile: ~Module._load module.js:448:24
-     14    2.6%      Script: ~<anonymous> C:\Users\vladv\destinyjs\node_modules\esm\esm.js:1:11
-     14  100.0%        LazyCompile: ~Module._compile module.js:610:37
-     14  100.0%          LazyCompile: ~Module._extensions..js module.js:662:37
-     14  100.0%            LazyCompile: ~Module.load module.js:557:33
-     13    2.4%      Script: ~<anonymous> C:\Users\vladv\destinyjs\node_modules\esm\esm.js:1:244791
-     12   92.3%        LazyCompile: ~<anonymous> C:\Users\vladv\destinyjs\node_modules\esm\esm.js:1:281956
-     12  100.0%          LazyCompile: ~Module._extensions..js module.js:662:37
-     12  100.0%            LazyCompile: ~lh C:\Users\vladv\destinyjs\node_modules\esm\esm.js:1:280735
-      1    7.7%        LazyCompile: ~al C:\Users\vladv\destinyjs\node_modules\esm\esm.js:1:238356
-      1  100.0%          LazyCompile: ~hl C:\Users\vladv\destinyjs\node_modules\esm\esm.js:1:241779
-      1  100.0%            LazyCompile: ~u C:\Users\vladv\destinyjs\node_modules\esm\esm.js:1:281764
-     13    2.4%      LazyCompile: ~Query C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\query.js:17:14
-     13  100.0%        LazyCompile: ~createQuery C:\Users\vladv\destinyjs\node_modules\mysql2\lib\connection.js:842:21
-     13  100.0%          LazyCompile: ~query C:\Users\vladv\destinyjs\node_modules\mysql2\lib\connection.js:524:8
-     13  100.0%            LazyCompile: ~Promise C:\Users\vladv\destinyjs\node_modules\mysql2\promise.js:93:29
-     12    2.2%      LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:73:31
-     12  100.0%        Builtin: ArrayForEach
-     12  100.0%          LazyCompile: *vivificateJsonBySchema C:\Users\vladv\destinyjs\schema.js:365:39
-     12  100.0%            LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
-     11    2.0%      LazyCompile: ~query C:\Users\vladv\destinyjs\node_modules\mysql2\promise.js:90:8
-     11  100.0%        LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
-     11  100.0%          Builtin: AsyncFunctionAwaitResolveClosure
-     11  100.0%            Builtin: PromiseHandle
-     11    2.0%      LazyCompile: *Query C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\query.js:17:14
-     11  100.0%        LazyCompile: ~createQuery C:\Users\vladv\destinyjs\node_modules\mysql2\lib\connection.js:842:21
-     10   90.9%          LazyCompile: *Promise C:\Users\vladv\destinyjs\node_modules\mysql2\promise.js:93:29
-     10  100.0%            Builtin: PromiseConstructor
-      1    9.1%          LazyCompile: ~query C:\Users\vladv\destinyjs\node_modules\mysql2\lib\connection.js:524:8
-      1  100.0%            LazyCompile: ~Promise C:\Users\vladv\destinyjs\node_modules\mysql2\promise.js:93:29
-     11    2.0%      LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:16:42
-     11  100.0%        Builtin: ArrayForEach
-     10   90.9%          LazyCompile: *step C:\Users\vladv\destinyjs\node_modules\flat\index.js:14:17
-     10  100.0%            LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:16:42
-      1    9.1%          LazyCompile: ~step C:\Users\vladv\destinyjs\node_modules\flat\index.js:14:17
-      1  100.0%            LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:16:42
-     10    1.8%      Builtin: RegExpPrototypeReplace
-     10  100.0%        Builtin: StringPrototypeReplace
-     10  100.0%          LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:33
-     10  100.0%            LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
-      9    1.7%      LazyCompile: ~Buffer.write buffer.js:855:34
-      6   66.7%        LazyCompile: ~fromString buffer.js:298:20
-      6  100.0%          LazyCompile: ~Buffer.from buffer.js:175:23
-      6  100.0%            LazyCompile: ~exports.encode C:\Users\vladv\destinyjs\node_modules\mysql2\lib\parsers\string.js:18:26
-      3   33.3%        LazyCompile: *fromString buffer.js:298:20
-      3  100.0%          LazyCompile: ~Buffer.from buffer.js:175:23
-      3  100.0%            LazyCompile: ~exports.encode C:\Users\vladv\destinyjs\node_modules\mysql2\lib\parsers\string.js:18:26
-      7    1.3%      LazyCompile: ~EventEmitter.init events.js:62:29
-      7  100.0%        LazyCompile: ~EventEmitter events.js:27:22
-      4   57.1%          LazyCompile: ~Command C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\command.js:6:14
-      4  100.0%            LazyCompile: ~Query C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\query.js:17:14
-      3   42.9%          LazyCompile: *Query C:\Users\vladv\destinyjs\node_modules\mysql2\lib\commands\query.js:17:14
-      3  100.0%            LazyCompile: ~createQuery C:\Users\vladv\destinyjs\node_modules\mysql2\lib\connection.js:842:21
-      7    1.3%      Builtin: PromiseHandle
-      7  100.0%        Stub: CallApiCallbackStub
-      7  100.0%          LazyCompile: *_tickDomainCallback internal/process/next_tick.js:194:31
-      6    1.1%      LazyCompile: ~fs.statSync fs.js:945:23
-      6  100.0%        LazyCompile: ~<anonymous> C:\Users\vladv\destinyjs\node_modules\esm\esm.js:1:171966
-      4   66.7%          LazyCompile: ~So C:\Users\vladv\destinyjs\node_modules\esm\esm.js:1:217556
-      4  100.0%            Script: ~<anonymous> C:\Users\vladv\destinyjs\node_modules\esm\esm.js:1:248168
-      2   33.3%          LazyCompile: ~bo C:\Users\vladv\destinyjs\node_modules\esm\esm.js:1:217193
-      1   50.0%            LazyCompile: ~yo C:\Users\vladv\destinyjs\node_modules\esm\esm.js:1:216916
-      1   50.0%            LazyCompile: ~xo C:\Users\vladv\destinyjs\node_modules\esm\esm.js:1:217041
-      6    1.1%      LazyCompile: ~fs.openSync fs.js:642:23
-      5   83.3%        LazyCompile: ~fs.readFileSync fs.js:548:27
-      3   60.0%          LazyCompile: ~Module._extensions..js module.js:662:37
-      3  100.0%            LazyCompile: ~lh C:\Users\vladv\destinyjs\node_modules\esm\esm.js:1:280735
-      2   40.0%          LazyCompile: ~<anonymous> C:\Users\vladv\destinyjs\node_modules\esm\esm.js:1:167361
-      2  100.0%            LazyCompile: ~<anonymous> C:\Users\vladv\destinyjs\node_modules\esm\esm.js:1:256739
-      1   16.7%        LazyCompile: ~fs.writeFileSync fs.js:1294:28
-      1  100.0%          LazyCompile: ~<anonymous> C:\Users\vladv\destinyjs\node_modules\esm\esm.js:1:176086
-      1  100.0%            Script: ~<anonymous> C:\Users\vladv\destinyjs\node_modules\esm\esm.js:1:178634
-      6    1.1%      LazyCompile: *onread net.js:583:16
+     16   13.7%    Builtin: StringPrototypeReplace
+     16  100.0%      LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+      8   50.0%        LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+      8  100.0%          Builtin: AsyncFunctionAwaitResolveClosure
+      8  100.0%            Builtin: PromiseHandle
+      8   50.0%        LazyCompile: *main C:\Users\vladv\destinyjs\schema_run.js:15:14
+      8  100.0%          Builtin: AsyncFunctionAwaitResolveClosure
+      8  100.0%            Builtin: PromiseHandle
+      3    2.6%    Builtin: StringPrototypeSplit
+      3  100.0%      LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:73:31
+      3  100.0%        Builtin: ArrayForEach
+      3  100.0%          LazyCompile: *vivificateJsonBySchema C:\Users\vladv\destinyjs\schema.js:365:32
+      2   66.7%            LazyCompile: *<anonymous> C:\Users\vladv\destinyjs\node_modules\flat\index.js:73:31
+      1   33.3%            LazyCompile: ~main C:\Users\vladv\destinyjs\schema_run.js:15:14
+      2    1.7%    LazyCompile: *sortByNestedLevel C:\Users\vladv\destinyjs\schema.js:69:27
+      2  100.0%      LazyCompile: ~QuickSort native array.js:573:19
+      2  100.0%        LazyCompile: ~InnerArraySort native array.js:529:24
+      2  100.0%          LazyCompile: ~sort native array.js:748:46
+      1   50.0%            LazyCompile: ~makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
+      1   50.0%            LazyCompile: *makeSaveDocument C:\Users\vladv\destinyjs\schema.js:207:26
 
