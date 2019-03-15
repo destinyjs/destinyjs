@@ -1,4 +1,7 @@
 import mysql, { escape, escapeId } from 'mysql2';
+import { unflatten } from 'flat';
+
+import { makeLoadDocument, getTablesBySchema } from './schema'
 
 const symbol = Symbol()
 
@@ -23,13 +26,13 @@ const normalizeField = field => {
   }
 
   if (typeof field === 'string') {
-    return escapeId(field);
+    return escapeId(field, true);
   }
 
   return escape(field);
 };
 
-const getSearchApi = (connection, tableName) => {
+const getSearchApi = (connection, tableName, schema) => {
   let promiseResolve = null,
       promiseReject = null;
 
@@ -43,29 +46,45 @@ const getSearchApi = (connection, tableName) => {
     try {
       const result = await new Promise((resolve, reject) => {
         const { extractFields, findCondition, sortFields, limitRows, skipRows } = promise[symbol];
+        const allTableNames = getTablesBySchema(schema, tableName);
 
         const queryParts = [
           'SELECT',
-          extractFields == null ? '*' : extractFields.map(escapeId).join(', '),
+          allTableNames.map(name => `${escapeId(name, true)}.*`),
+          // extractFields == null ? '*' : extractFields.map(escapeId).join(', '),
           'FROM',
-          escapeId(tableName)
+          allTableNames.map(name => escapeId(name, true)).join(', ')
         ];
 
-        if (Array.isArray(findCondition) && findCondition.length > 0) {
-          const findParts = [];
+        const findParts = [];
 
+        for (const name of allTableNames) {
+          if (name === tableName) {
+            continue;
+          }
+
+          findParts.push([
+            `${escapeId(tableName, true)}.${escapeId('AggregateId')}`,
+            '=',
+            `${escapeId(name, true)}.${escapeId('AggregateId')}`
+          ].join(' '));
+        }
+        
+        if (Array.isArray(findCondition) && findCondition.length > 0) {
           for (const [left, operator, right] of findCondition) {
             if (Array.isArray(right)) {
               const list = right
                 .map(normalizeField)
                 .join(', ');
 
-              findParts.push(`${escapeId(left)} ${operator} (${list})`);
+              findParts.push(`${escapeId(tableName, true)}.${escapeId(left, true)} ${operator} (${list})`);
             } else {
-              findParts.push(`${escapeId(left)} ${operator} ${normalizeField(right)}`);
+              findParts.push(`${escapeId(tableName, true)}.${escapeId(left, true)} ${operator} ${normalizeField(right)}`);
             }
           }
+        }
 
+        if (findParts.length > 0) {
           queryParts.push('WHERE', findParts.join(' AND '));
         }
 
@@ -77,7 +96,7 @@ const getSearchApi = (connection, tableName) => {
               continue;
             }
 
-            queryParts.push(`${escapeId(fieldName)} ${sortFields[fieldName] === -1 ? 'DESC' : 'ASC'}`);
+            queryParts.push(`${escapeId(fieldName, true)} ${sortFields[fieldName] === -1 ? 'DESC' : 'ASC'}`);
           }
         }
 
@@ -90,13 +109,13 @@ const getSearchApi = (connection, tableName) => {
         }
 
         queryParts.push(';');
-        const query = queryParts.join(' ');
+        const sql = queryParts.join(' ');
 
-        connection.query(query, (error, rows) => {
+        connection.query(sql, (error, rows) => {
           if (error) {
             reject(error);
           } else {
-            resolve(rows);
+            resolve(rows.map(row => unflatten(row)));
           }
         });
       });
@@ -162,8 +181,8 @@ const getDbApi = (connectionParams) => {
   const connection = mysql.createConnection(connectionParams);
 
   return {
-    table(name) {
-      return getSearchApi(connection, name);
+    table(name, schema) {
+      return getSearchApi(connection, name, schema);
     },
     async close() {
       await connection.close();
