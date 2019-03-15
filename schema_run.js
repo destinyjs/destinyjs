@@ -64,16 +64,18 @@ const main = async () => {
     port: 3306
   })
 
-  const tablesDeclaration = makeCreateTableBySchema(schema, 'Stories')
+  const pool = {}
+
+  const tablesDeclaration = makeCreateTableBySchema(pool, schema, 'Stories')
   await connection.query(tablesDeclaration)
 
-  const saveDocumentDeclaration = makeSaveDocument(schema, 'AggId', 'Stories', document)
+  const saveDocumentDeclaration = makeSaveDocument(pool, schema, 'AggId', 'Stories', document)
   await connection.query(saveDocumentDeclaration)
 
-  const loadDocumentDeclataion = makeLoadDocument(schema, 'AggId', 'Stories')
+  const loadDocumentDeclataion = makeLoadDocument(pool, schema, 'AggId', 'Stories')
   const rowList = await connection.query(loadDocumentDeclataion)
 
-  const originalDocument = vivificateJsonBySchema(schema, rowList, 'Stories')
+  const originalDocument = vivificateJsonBySchema(pool, schema, rowList, 'Stories')
   console.log(stringify(originalDocument))
   console.log(stringify(document))
 }

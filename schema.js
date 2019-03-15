@@ -17,7 +17,13 @@ const primitiveTypesMap = new Map([
   [dateType, Date]
 ])
 
-export const validateAndFlattenSchema = (schema, path = '$') => {
+export const validateAndFlattenSchema = (pool, schema, path = '$') => {
+  if(path === '$') {
+    pool.flatSchemaMap = pool.flatSchemaMap != null ? pool.flatSchemaMap : new Map()
+    if(pool.flatSchemaMap.has(schema)) {
+      return pool.flatSchemaMap.get(schema)
+    }
+  }
   if(schema == null || schema.constructor !== Object) {
     throw new Error(`Wrong schema at ${path} - contain ${JSON.stringify(schema)}`)
   }
@@ -36,7 +42,7 @@ export const validateAndFlattenSchema = (schema, path = '$') => {
       if(typeof subValue === 'symbol' && primitiveTypesMap.has(subValue)) {
         fields.set(subPath, primitiveTypesMap.get(subValue))
       } else {
-        const subFields = validateAndFlattenSchema(subValue, subPath)
+        const subFields = validateAndFlattenSchema(pool, subValue, subPath)
 
         subFields.forEach((value, key) => {
           fields.set(key, value);
@@ -45,12 +51,16 @@ export const validateAndFlattenSchema = (schema, path = '$') => {
     } else {
       const subPath = `${path}.${key}`
 
-      const subFields = validateAndFlattenSchema(schema[key], subPath)
+      const subFields = validateAndFlattenSchema(pool, schema[key], subPath)
 
       subFields.forEach((value, key) => {
           fields.set(key, value);
       })
     }
+  }
+
+  if(path === '$') {
+    pool.flatSchemaMap.set(schema, fields)
   }
 
   return fields
@@ -60,8 +70,13 @@ const sortByNestedLevel = (a, b) => (a.nestedLevel !== b.nestedLevel)
     ? (a.nestedLevel < b.nestedLevel ? -1 : 1)
     : (a < b) ? -1 : 1
 
-export const makeCreateTableBySchema = (schema, baseTableName) => {
-  const fieldSchema = validateAndFlattenSchema(schema)
+export const makeCreateTableBySchema = (pool, schema, baseTableName) => {
+  pool.tableCreation = pool.tableCreation != null ? pool.tableCreation : new Map()
+  if(pool.tableCreation.has(schema)) {
+    return pool.tableCreation.get(schema)
+  }
+
+  const fieldSchema = validateAndFlattenSchema(pool, schema)
   const sortedFields = []
 
   fieldSchema.forEach((value, key) => {
@@ -139,13 +154,20 @@ export const makeCreateTableBySchema = (schema, baseTableName) => {
     sql += `);\n`
   }
 
+  pool.tableCreation.set(schema, sql)
+
   return sql
 }
 
 const regexBrackets = /\[\]/g
 
-export const getTablesBySchema = (schema, baseTableName) => {
-  const fieldSchema = validateAndFlattenSchema(schema)
+export const getTablesBySchema = (pool, schema, baseTableName) => {
+  pool.tablesSchema = pool.tablesSchema != null ? pool.tablesSchema : new Map()
+  if(pool.tablesSchema.has(schema)) {
+    return pool.tablesSchema.get(schema)
+  }
+
+  const fieldSchema = validateAndFlattenSchema(pool, schema)
   const sortedFields = []
 
   fieldSchema.forEach((value, key) => {
@@ -177,14 +199,16 @@ export const getTablesBySchema = (schema, baseTableName) => {
     tablesSchemata[tableName][fieldName] = fieldSchema.get(`$.${key}`)
   }
 
+  pool.tablesSchema.set(schema, tablesSchemata)
+
   return tablesSchemata
 }
 
-export const makeSaveDocument = (schema, aggregateId, baseTableName, document) => {
-  const fieldSchema = validateAndFlattenSchema(schema)
+export const makeSaveDocument = (pool, schema, aggregateId, baseTableName, document) => {
+  const fieldSchema = validateAndFlattenSchema(pool, schema)
   const flatDocument = flatten(document)
 
-  const allTableNames = Object.keys(getTablesBySchema(schema, baseTableName))
+  const allTableNames = Object.keys(getTablesBySchema(pool, schema, baseTableName))
   let sql = ''
   for(const tableName of allTableNames) {
     sql += `DELETE FROM ${escapeId(tableName)} WHERE ${escapeId('AggregateId')} = ${escape(aggregateId)};\n`
@@ -303,8 +327,8 @@ export const makeSaveDocument = (schema, aggregateId, baseTableName, document) =
   return sql
 }
 
-export const makeLoadDocument = (schema, aggregateId, baseTableName) => {
-  const tablesSchemata = getTablesBySchema(schema, baseTableName)
+export const makeLoadDocument = (pool, schema, aggregateId, baseTableName) => {
+  const tablesSchemata = getTablesBySchema(pool, schema, baseTableName)
   const allTableNames = Object.keys(tablesSchemata)
   const allFields = new Set()
 
@@ -338,8 +362,8 @@ export const makeLoadDocument = (schema, aggregateId, baseTableName) => {
   return sql
 }
 
-export const vivificateJsonBySchema = (schema, resultSet, baseTableName) => {
-  const tablesSchemata = getTablesBySchema(schema, baseTableName)
+export const vivificateJsonBySchema = (pool, schema, resultSet, baseTableName) => {
+  const tablesSchemata = getTablesBySchema(pool, schema, baseTableName)
   const unflattenDocument = {}
   const lastArrayIndexesByTable = {}
   const [rowList] = resultSet
