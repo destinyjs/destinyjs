@@ -64,20 +64,53 @@ const main = async () => {
     port: 3306
   })
 
+  const iterations = 1000
   const pool = {}
-
   const tablesDeclaration = makeCreateTableBySchema(pool, schema, 'Stories')
   await connection.query(tablesDeclaration)
+  let dt1 = null, dt2 = null, ops = null
 
-  const saveDocumentDeclaration = makeSaveDocument(pool, schema, 'AggId', 'Stories', document)
-  await connection.query(saveDocumentDeclaration)
+  dt1 = Date.now()
+  for(let i = 0; i < iterations; i++) {
+    const saveDocumentDeclaration = makeSaveDocument(pool, schema, 'AggId', 'Stories', document)
+    await connection.query(saveDocumentDeclaration)
 
-  const loadDocumentDeclataion = makeLoadDocument(pool, schema, 'AggId', 'Stories')
-  const rowList = await connection.query(loadDocumentDeclataion)
+    const loadDocumentDeclataion = makeLoadDocument(pool, schema, 'AggId', 'Stories')
+    const rowList = await connection.query(loadDocumentDeclataion)
 
-  const originalDocument = vivificateJsonBySchema(pool, schema, rowList, 'Stories')
-  console.log(stringify(originalDocument))
-  console.log(stringify(document))
+    const originalDocument = vivificateJsonBySchema(pool, schema, rowList, 'Stories')
+    //console.log(stringify(originalDocument))
+    //console.log(stringify(document))
+  }
+
+  dt2 = Date.now()
+  ops = (iterations / (dt2 - dt1)) * 1000
+  console.log(`Avarage ${ops} R/W ops per second`)
+
+  dt1 = Date.now()
+  for(let i = 0; i < iterations; i++) {
+    const saveDocumentDeclaration = makeSaveDocument(pool, schema, 'AggId', 'Stories', document)
+    await connection.query(saveDocumentDeclaration)
+  }
+
+  dt2 = Date.now()
+  ops = (iterations / (dt2 - dt1)) * 1000
+  console.log(`Avarage ${ops} write ops per second`)
+
+
+  dt1 = Date.now()
+  for(let i = 0; i < iterations; i++) {
+    const loadDocumentDeclataion = makeLoadDocument(pool, schema, 'AggId', 'Stories')
+    const rowList = await connection.query(loadDocumentDeclataion)
+
+    const originalDocument = vivificateJsonBySchema(pool, schema, rowList, 'Stories')
+  }
+
+  dt2 = Date.now()
+  ops = (iterations / (dt2 - dt1)) * 1000
+  console.log(`Avarage ${ops} read ops per second`)
+
+  process.exit(0)
 }
 
 main()
