@@ -346,19 +346,18 @@ export const vivificateJsonBySchema = (resultSet, baseTableName) => {
     const { AggregateId, LeftPrefix, SourceTableName, ...fields } = row
     for(const fieldName of Object.keys(fields)) {
       const value = fields[fieldName]
-      if(value == null) {
-        continue
-      }
 
       if(SourceTableName === baseTableName) {
         unflattenDocument[fieldName] = value
         unflattenDocument.aggregateId = AggregateId
       } else {
-        if(lastArrayIndexesByTable[LeftPrefix] == null) {
-          lastArrayIndexesByTable[LeftPrefix] = 0
+        const uniqueIndex = `${LeftPrefix}[].${fieldName}`
+
+        if(lastArrayIndexesByTable[uniqueIndex] == null) {
+          lastArrayIndexesByTable[uniqueIndex] = 0
         }
 
-        const idx = lastArrayIndexesByTable[LeftPrefix]++
+        const idx = lastArrayIndexesByTable[uniqueIndex]++
 
         const compoundKey = `${LeftPrefix}[${idx}].${fieldName}`
         const unflattenKey = compoundKey.replace(/\[(\d+)\]/, '.$1')

@@ -73,7 +73,7 @@ const main = async () => {
   const rowList = await connection.query(loadDocumentDeclataion)
 
   const originalDocument = vivificateJsonBySchema(rowList, 'Stories')
-  console.log(originalDocument)
+  console.log(JSON.stringify(originalDocument))
 }
 
 main()
