@@ -348,11 +348,11 @@ export const vivificateJsonBySchema = (schema, resultSet, baseTableName) => {
     const { AggregateId, LeftPrefix, SourceTableName, ...fields } = row
     for(const fieldName of Object.keys(fields)) {
       const columnName = fieldName !== internalTableKey ? fieldName : ''
-      const value = fields[fieldName]
-
-      if(tablesSchemata[SourceTableName][columnName] == null) {
+      const typeConstructor = tablesSchemata[SourceTableName][columnName]
+      if(typeConstructor == null) {
         continue
       }
+      const value = typeConstructor(fields[fieldName])
 
       if(SourceTableName === baseTableName) {
         unflattenDocument[columnName] = value
