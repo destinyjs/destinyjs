@@ -1,4 +1,5 @@
 import destiny from './destiny'
+import {S} from './read-api'
 
 const options = {
 	writeModels: [
@@ -51,8 +52,16 @@ const events = [
 ]
 
 const main = async () => {
-	await destiny(options).init()
-	await destiny(options).publish(events)
+	const application = destiny(options)
+
+	await application.init()
+	await application.publish(events)
+	// await application
+	// 	.api
+  //   .table('Stories', schema)
+  //   .find([
+  //     ['a.ab', '=', S`Qwerty`]
+  //   ]);
 }
 
 main().catch(error=>console.error(error))
