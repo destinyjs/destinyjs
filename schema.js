@@ -8,6 +8,7 @@ export const dateType = Symbol('DateType')
 
 const escapeId = str => `\`${String(str).replace(/[`\\]/ig, '\\$1')}\``
 const escape = str => `"${String(str).replace(/["\\]/ig, '\\$1')}"`
+const internalTableKey = '.INTERNAL.'
 
 const primitiveTypesMap = new Map([
   [numberType, Number],
@@ -129,7 +130,7 @@ export const makeCreateTableBySchema = (schema, baseTableName) => {
     sql += `  \`LeftPrefix\` VARCHAR(700) NOT NULL, \n`
 
     for(const columnName of Object.keys(tableSchema)) {
-      const fieldName = columnName.length > 0 ? columnName : '<INTERNAL>'
+      const fieldName = columnName.length > 0 ? columnName : internalTableKey
       sql += `  ${escapeId(fieldName)} ${tableSchema[columnName]} NULL, \n`
     }
 
@@ -260,7 +261,7 @@ export const makeSaveDocument = (schema, aggregateId, baseTableName, document) =
 
     const targetDocument = tablesAffinity[tableName][documentIndex]
 
-    const columnName = fieldName.length > 0 ? fieldName : '<INTERNAL>'
+    const columnName = fieldName.length > 0 ? fieldName : internalTableKey
 
     targetDocument[columnName] = flatDocument[key.originalKey]    
   }
@@ -309,7 +310,7 @@ export const makeLoadDocument = (schema, aggregateId, baseTableName) => {
 
   for(const tableName of allTableNames) {
     for(const key of Object.keys(tablesSchemata[tableName])) {
-      const columnName = key.length > 0 ? key : '<INTERNAL>'
+      const columnName = key.length > 0 ? key : internalTableKey
       allFields.add(columnName)
     }
   }
@@ -318,7 +319,7 @@ export const makeLoadDocument = (schema, aggregateId, baseTableName) => {
   for(const tableName of allTableNames) {
     sql += `(SELECT \`AggregateId\`, \`LeftPrefix\`, `
     for(const key of allFields.values()) {
-      if(tablesSchemata[tableName][key !== '<INTERNAL>' ? key : ''] != null) {
+      if(tablesSchemata[tableName][key !== internalTableKey ? key : ''] != null) {
         sql += `  ${escapeId(key)} AS ${escapeId(key)},\n`
       } else {
         sql += `  NULL AS ${escapeId(key)},\n`
@@ -346,7 +347,7 @@ export const vivificateJsonBySchema = (schema, resultSet, baseTableName) => {
   for(const row of rowList) {
     const { AggregateId, LeftPrefix, SourceTableName, ...fields } = row
     for(const fieldName of Object.keys(fields)) {
-      const columnName = fieldName !== '<INTERNAL>' ? fieldName : ''
+      const columnName = fieldName !== internalTableKey ? fieldName : ''
       const value = fields[fieldName]
 
       if(tablesSchemata[SourceTableName][columnName] == null) {
