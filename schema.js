@@ -82,7 +82,7 @@ export const makeCreateTableBySchema = (schema, baseTableName) => {
 
     const lastArrayPos = key.lastIndexOf('[]')
     const longestPrefix = lastArrayPos > -1 ? key.substring(0, lastArrayPos) : ''
-    const fieldName = lastArrayPos > -1 ? key.substring(lastArrayPos + 2) : key
+    const fieldName = lastArrayPos > -1 ? key.substring(lastArrayPos + 3) : key
 
     const tableName = longestPrefix.length > 0
       ? `${baseTableName}-${longestPrefix}`
@@ -163,7 +163,7 @@ export const getTablesBySchema = (schema, baseTableName) => {
   for(const key of sortedFields) {
     const lastArrayPos = key.lastIndexOf('[]')
     const longestPrefix = lastArrayPos > -1 ? key.substring(0, lastArrayPos) : ''
-    const fieldName = lastArrayPos > -1 ? key.substring(lastArrayPos + 2) : key
+    const fieldName = lastArrayPos > -1 ? key.substring(lastArrayPos + 3) : key
 
     const tableName = longestPrefix.length > 0
       ? `${baseTableName}-${longestPrefix}`
@@ -229,7 +229,7 @@ export const makeSaveDocument = (schema, aggregateId, baseTableName, document) =
     const pureKey = key.replace(/\[(\d+)\]/ig, '[]')
     const lastArrayPos = pureKey.lastIndexOf('[]')
     const longestPrefix = lastArrayPos > -1 ? pureKey.substring(0, lastArrayPos) : ''
-    const fieldName = lastArrayPos > -1 ? pureKey.substring(lastArrayPos + 2) : pureKey
+    const fieldName = lastArrayPos > -1 ? pureKey.substring(lastArrayPos + 3) : pureKey
 
     const leftPrefix = key.substr(0, key.lastIndexOf('['))
     
@@ -337,20 +337,21 @@ export const makeLoadDocument = (schema, aggregateId, baseTableName) => {
   return sql
 }
 
-export const vivificateJsonBySchema = (rowList, baseTableName) => {
-  console.log('@@@', rowList)
+export const vivificateJsonBySchema = (resultSet, baseTableName) => {
   const unflattenDocument = {}
   const lastArrayIndexesByTable = {}
+  const [rowList] = resultSet
 
   for(const row of rowList) {
-    const { AggregateId, LeftPrefix, ...fields } = row
+    const { AggregateId, LeftPrefix, SourceTableName, ...fields } = row
     for(const fieldName of Object.keys(fields)) {
-      const tableNameShift = fieldName.lastIndexOf('`.')
-      const tableName = fieldName.substring(1, tableNameShift)
-      const pureField = fieldName.substring(tableNameShift + 2)
+      const value = fields[fieldName]
+      if(value == null) {
+        continue
+      }
 
-      if(tableName === baseTableName) {
-        unflattenDocument[pureField] = fields[fieldName]
+      if(SourceTableName === baseTableName) {
+        unflattenDocument[fieldName] = value
         unflattenDocument.aggregateId = AggregateId
       } else {
         if(lastArrayIndexesByTable[LeftPrefix] == null) {
@@ -359,10 +360,10 @@ export const vivificateJsonBySchema = (rowList, baseTableName) => {
 
         const idx = lastArrayIndexesByTable[LeftPrefix]++
 
-        const compoundKey = `${LeftPrefix}[${idx}]${pureField}`
-        const unflattenKey = compoundKey.replace(/\[\d+\]/, '.$1')
+        const compoundKey = `${LeftPrefix}[${idx}].${fieldName}`
+        const unflattenKey = compoundKey.replace(/\[(\d+)\]/, '.$1')
 
-        unflattenDocument[unflattenKey] = fields[fieldName]
+        unflattenDocument[unflattenKey] = value
       }
 
     }
